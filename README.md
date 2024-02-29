@@ -1,4 +1,4 @@
-#Overlay Sport
+# Overlay Sport
 An After Effects script to convert text inputs into a set of comps populated with data from an external file.
 
 Overlay Sport has three components:

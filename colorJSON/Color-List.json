@@ -1,0 +1,34 @@
+{
+  "1": {
+    "name": "Blue",
+    "bg": "00227F",
+    "pattern": "1D56C0",
+    "element": "80C7FB",
+    "extraLight": "9FDDFF",
+    "text": "00227F"
+  },
+  "2": {
+    "name": "Green",
+    "bg": "1B5744",
+    "pattern": "247554",
+    "element": "7BFC76",
+    "extraLight": "93EF91",
+    "text": "244739"
+  },
+  "3": {
+    "name": "Purple",
+    "bg": "500A96",
+    "pattern": "612CB0",
+    "element": "BEAFFF",
+    "extraLight": "BDAFF5",
+    "text": "2A145A"
+  },
+  "4": {
+    "name": "Red",
+    "bg": "691D3F",
+    "pattern": "B30B37",
+    "element": "F9D674",
+    "extraLight": "EEC470",
+    "text": "4A193A"
+  }
+}

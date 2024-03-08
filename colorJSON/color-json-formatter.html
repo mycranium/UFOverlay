@@ -1,37 +1,527 @@
 <!doctype html>
+<link href="css/color_json.css" rel="stylesheet" type="text/css" media="screen">
+<script type="text/javascript" src="js/color_json_formatter.js" defer></script>
 <html>
 <head>
 <meta charset="utf-8">
-<title>color-json</title>
+<title>Colormaker</title>
 </head>
 
 <body>
-	<div class="wrapper">
-		<div class="content">
-			<div id="actionDiv"></div>
-			<div class="display-wrap">
-				<div class="display">
-					<div class="data">
-						<div class="family"></div>
-					</div>
-				</div>
-				<div class="display">
-					<div class="data">
-						<div class="family"></div>
-					</div>
-				</div>
-				<div class="display">
-					<div class="data">
-						<div class="family"></div>
-					</div>
-				</div>
-				<div class="display">
-					<div class="data">
-						<div class="family"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="wrapper">
+  <header class="blue">
+    <h1>Color Data Generator</h1>
+  </header>
+  <div class="main_content"> 
+    <!-- INITIAL ACTION BUTTONS -->
+    <div id="actionDiv" class="row">
+      <h2>Select an option to get started:</h2>
+      <ul id="action_buttons_list" class="horizontal">
+        <li>
+          <button id="new_file" class="actions scratch" type="button">Start from scratch</button>
+        </li>
+        <li>
+          <button id="edit_file" class="actions load" type="button">Load Existing File</button>
+        </li>
+      </ul>
+    </div>
+    <!-- DATA ENTRY PANEL -->
+    <div id="input_wrapper" class="wrap flex_container_row">
+      <div id="input_content" class="container flex_container_column">
+        <form action="">
+          <div class="inputs family_name flex_container_row">
+            <label for="input_family">
+            <p>Color Family Name</p>
+            </label>
+            <input id="input_family" type="text" class="scratch" value="" autocomplete="off" minlength="3" maxlength="15" placeholder="Required. 15 characters max." pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required>
+          </div>
+          <div class="inputs flex_container_column">
+            <ul class="color_inputs flex_container_row">
+              <li>
+                <p>Color 1</p>
+                <p>(Background)</p>
+              </li>
+              <li>
+                <label for="color_1_name">Name (optional)</label>
+                <input id="color_1_name" type="text" autocomplete="off" class="color_name" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" maxlength="15" placeholder="Optional. 15 characters max." />
+              </li>
+              <li>
+                <label for="color_1_hex">Hex Value (required)</label>
+                <input id="color_1_hex" type="text" autocomplete="off" class="color_hex" placeholder="Required" maxlength="7" ninlength="6" pattern="#?[0-9a-fA-F]{6}" required />
+              </li>
+            </ul>
+            <ul class="color_inputs flex_container_row">
+              <li>
+                <p>Color 2</p>
+                <p>(Pattern)</p>
+              </li>
+              <li>
+                <label for="color_2_name">Name (optional)</label>
+                <input id="color_2_name" type="text" autocomplete="off" class="color_name" maxlength="15" placeholder="Optional. 15 characters max." />
+              </li>
+              <li>
+                <label for="color_2_hex">Hex Value (required)</label>
+                <input id="color_2_hex" type="text" autocomplete="off" class="color_hex" placeholder="Required" pattern="#?[0-9a-fA-F]{6}" required />
+              </li>
+            </ul>
+            <ul class="color_inputs flex_container_row">
+              <li>
+                <p>Color 3</p>
+                <p>(Element)</p>
+              </li>
+              <li>
+                <label for="color_3_name">Name (optional)</label>
+                <input id="color_3_name" type="text" autocomplete="off" class="color_name" maxlength="15" placeholder="Optional. 15 characters max." />
+              </li>
+              <li>
+                <label for="color_3_hex">Hex Value (required)</label>
+                <input id="color_3_hex" type="text" autocomplete="off" class="color_hex" placeholder="Required" pattern="#?[0-9a-fA-F]{6}" required />
+              </li>
+            </ul>
+            <ul class="color_inputs flex_container_row">
+              <li>
+                <p>Color 4</p>
+                <p>(Override)</p>
+              </li>
+              <li>
+                <label for="color_4_name">Name (optional)</label>
+                <input id="color_4_name" type="text" autocomplete="off" class="color_name" maxlength="15" placeholder="Optional. 15 characters max." />
+              </li>
+              <li>
+                <label for="color_4_hex">Hex Value (optional)</label>
+                <input id="color_4_hex" type="text" autocomplete="off" class="color_hex" placeholder="Optional" pattern="[#?0-9a-fA-F]{6}" />
+              </li>
+            </ul>
+            <ul class="color_inputs flex_container_row">
+              <li>
+                <p>Color 5</p>
+                <p>(Text)</p>
+              </li>
+              <li>
+                <label for="color_5_name">Name (optional)</label>
+                <input id="color_5_name" type="text" autocomplete="off" class="color_name" maxlength="15" placeholder="Optional. 15 characters max." />
+              </li>
+              <li>
+                <label for="color_5_hex">Hex Value (optional)</label>
+                <input id="color_5_hex" type="text" autocomplete="off" class="color_hex" placeholder="Optional" pattern="[#?0-9a-fA-F]{6}" />
+              </li>
+            </ul>
+          </div>
+          <div id="color_inputs_enter_wrapper">
+            <div id="color_inputs_enter" >
+              <button id="entry_button_enter" class="default_button green enter" type="button">Enter</button>
+              <button id="entry_button_clear" class="default_button red clear" type="button">Clear</button>
+            </div>
+            <div id="color_inputs_message" class="message">
+              <p><span>Alert:</span> Fields in pink are required.</p>
+              <button class="message_button">OK</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="input_instructions" class="sidebar flex_container_column">
+        <h3>Instructions:</h3>
+        <p><strong>Build a color family here.</strong></p>
+        <p><strong>Color Family Name</strong> is required. It must contain only letters. <em>Min 3 characters, max 15</em>.</p>
+        <p>Color <strong>Names</strong> are optional. If used, they must start with a letter and contain only letters, numbers and spaces. <em>Max 15 characters</em>.</p>
+        <p><strong>Hex Values</strong> are required. A leading hash character (#) is not required. Hex values must be vaild: six characters long (not including an optional leading hash character) containing only letters from a-f and numbers from 0-9. They are not case-sensitive.</p>
+        <p><strong>Colors 1 through 3 are required</strong>. If you leave colors 4 or 5 empty, they will use the values from Color 3 and Color 1 respectively.</p>
+        <p>If you want to start over, click the <strong>"Clear" button</strong>.</p>
+        <p>When you're done, cick the <strong>"Enter" button</strong> to add the family.</p>
+      </div>
+    </div>
+  </div>
+  <!-- FILE SELECTOR PANEL -->
+  <div id="file_selector_panel" class="file_selector_panel">
+    <div class="input_panel_content">
+      <div class="file_button-wrap">
+        <label class="file_button" for="file_input">Select File</label>
+        <div class="input_wrap">
+          <input id="file_input" type="file" accept=".json" autocomplete="off">
+        </div>
+      </div>
+      <div class="input_panel_buttons">
+        <button id="file_process_button" class="default_button green process">Process File</button>
+        <button id="file_cancel_button" class="default_button red cancel">Cancel</button>
+      </div>
+    </div>
+    <div id="file_message_panel" class="input_panel_message" hidden>
+      <div class="file_warning_text">
+        <p>Do you want to save a backup of your original file (recommended)?</p>
+      </div>
+      <div class="file_warning_buttons">
+        <button id="file_message_button_yes" class="default_button green">Yes</button>
+        <button id="file_message_button_no" class="default_button red">No</button>
+      </div>
+    </div>
+  </div>
+  <!-- DATA DISPLAY PANEL-->
+  <div id="display_wrapper" class="display_wrap dragContainer">
+    <div class="display draggable gray" draggable="true" data-ref="1">
+      <div class="data">
+        <div class="family gray">
+          <h3>Family <span class="color_order">1</span>: <span class="family_name">Empty</span></h3>
+          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required>
+        </div>
+        <div class="values">
+          <div class="color color_1">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Background</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_2">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Pattern</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_3">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Dell Element</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_4">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Override</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_5">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Text</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+        </div>
+        <div class="display_controls">
+          <div class="display_edit_controls">
+            <button class="default_button small green edit gray" disabled type="button">Edit</button>
+          </div>
+          <div class="display_save_controls">
+            <button class="default_button small green save" disabled type="button">Save</button>
+            <button class="default_button small red cancel" disabled type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="display draggable gray" draggable="true" data-ref="2">
+      <div class="data">
+        <div class="family gray">
+          <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
+          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required>
+        </div>
+        <div class="values">
+          <div class="color color_1">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Background</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_2">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Pattern</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_3">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Dell Element</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_4">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Override</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_5">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Text</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+        </div>
+        <div class="display_controls">
+          <div class="display_edit_controls">
+            <button class="default_button small green edit gray" disabled type="button">Edit</button>
+          </div>
+          <div class="display_save_controls">
+            <button class="default_button small green save" disabled type="button">Save</button>
+            <button class="default_button small red cancel" disabled type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="display draggable gray" draggable="true" data-ref="3">
+      <div class="data">
+        <div class="family gray">
+          <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
+          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required>
+        </div>
+        <div class="values">
+          <div class="color color_1">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Background</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_2">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Pattern</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_3">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Dell Element</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_4">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Override</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_5">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Text</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="display_controls">
+            <div class="display_edit_controls">
+              <button class="default_button small green edit gray" disabled type="button">Edit</button>
+            </div>
+            <div class="display_save_controls">
+              <button class="default_button small green save" disabled type="button">Save</button>
+              <button class="default_button small red cancel" disabled type="button">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="display draggable gray" draggable="true" data-ref="4">
+      <div class="data">
+        <div class="family gray">
+          <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
+          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required>
+        </div>
+        <div class="values">
+          <div class="color color_1">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Background</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_2">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Pattern</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_3">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Dell Element</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_4">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Override</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+          <div class="color color_5">
+            <ul class="color_text">
+              <li class="color_name">
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+              </li>
+              <li class="color_hex_val">
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+              </li>
+              <li class="color_role">Text</li>
+            </ul>
+            <div class="color_sample">
+              <div class="color_swatch"></div>
+            </div>
+          </div>
+        </div>
+        <div class="display_controls">
+          <div class="display_edit_controls">
+            <button class="default_button small green edit gray" disabled type="button">Edit</button>
+          </div>
+          <div class="display_save_controls">
+            <button class="default_button small green save" disabled type="button">Save</button>
+            <button class="default_button small red cancel" disabled type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="export_wrapper">
+    <div class="export_content">
+      <button id="export_button" class="default_button green">Export Color List</button>
+    </div>
+  </div>
+  <footer class="blue">
+    <p class="footer_text">Colormaker &copy; 2024 Michael Rainey</p>
+  </footer>
+</div>
 </body>
 </html>

@@ -110,7 +110,8 @@
           <div id="color_inputs_enter_wrapper">
             <div id="color_inputs_enter" >
               <button id="entry_button_enter" class="default_button green enter" type="button">Enter</button>
-              <button id="entry_button_clear" class="default_button red clear" type="button">Clear</button>
+              <button id="entry_button_clear" class="default_button orange clear" type="button">Clear</button>
+              <button id="entry_button_cancel" class="default_button red cancel" type="button">Cancel</button>
             </div>
             <div id="color_inputs_message" class="message">
               <p><span>Alert:</span> Fields in pink are required.</p>
@@ -141,8 +142,8 @@
         </div>
       </div>
       <div class="input_panel_buttons">
-        <button id="file_process_button" class="default_button green process">Process File</button>
-        <button id="file_cancel_button" class="default_button red cancel">Cancel</button>
+        <button id="file_process_button" disabled="true" class="default_button green process" type="button">Process File</button>
+        <button id="file_cancel_button" class="default_button red cancel" type="button">Cancel</button>
       </div>
     </div>
     <div id="file_message_panel" class="input_panel_message" hidden>
@@ -150,16 +151,16 @@
         <p>Do you want to save a backup of your original file (recommended)?</p>
       </div>
       <div class="file_warning_buttons">
-        <button id="file_message_button_yes" class="default_button green">Yes</button>
-        <button id="file_message_button_no" class="default_button red">No</button>
+        <button id="file_message_button_yes" class="default_button green" type="button">Yes</button>
+        <button id="file_message_button_no" class="default_button red" type="button">No</button>
       </div>
     </div>
   </div>
   <!-- DATA DISPLAY PANEL-->
   <div id="display_wrapper" class="display_wrap dragContainer shrink">
-    <div class="display draggable gray dim" draggable="false" data-ref="1">
+    <div class="display draggable dim" draggable="false" data-ref="1">
       <div class="data">
-        <div class="family gray">
+        <div class="family">
           <h3>Family <span class="color_order">1</span>: <span class="family_name">Empty</span></h3>
           <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required disabled />
         </div>
@@ -237,7 +238,7 @@
         </div>
         <div class="display_controls">
           <div class="display_edit_controls">
-            <button class="default_button small green edit gray" disabled type="button">Edit</button>
+            <button class="default_button small green edit" disabled type="button">Edit</button>
           </div>
           <div class="display_save_controls">
             <button class="default_button small green save" disabled type="button">Save</button>
@@ -246,9 +247,9 @@
         </div>
       </div>
     </div>
-    <div class="display draggable gray dim" draggable="false" data-ref="2">
+    <div class="display draggable dim" draggable="false" data-ref="2">
       <div class="data">
-        <div class="family gray">
+        <div class="family">
           <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
           <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required disabled />
         </div>
@@ -326,7 +327,7 @@
         </div>
         <div class="display_controls">
           <div class="display_edit_controls">
-            <button class="default_button small green edit gray" disabled type="button">Edit</button>
+            <button class="default_button small green edit" disabled type="button">Edit</button>
           </div>
           <div class="display_save_controls">
             <button class="default_button small green save" disabled type="button">Save</button>
@@ -335,9 +336,9 @@
         </div>
       </div>
     </div>
-    <div class="display draggable gray dim" draggable="false" data-ref="3">
+    <div class="display draggable dim" draggable="false" data-ref="3">
       <div class="data">
-        <div class="family gray">
+        <div class="family">
           <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
           <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required disabled />
         </div>
@@ -414,7 +415,7 @@
           </div>
           <div class="display_controls">
             <div class="display_edit_controls">
-              <button class="default_button small green edit gray" disabled type="button">Edit</button>
+              <button class="default_button small green edit" disabled type="button">Edit</button>
             </div>
             <div class="display_save_controls">
               <button class="default_button small green save" disabled type="button">Save</button>
@@ -424,9 +425,9 @@
         </div>
       </div>
     </div>
-    <div class="display draggable gray dim" draggable="false" data-ref="4">
+    <div class="display draggable dim" draggable="false" data-ref="4">
       <div class="data">
-        <div class="family gray">
+        <div class="family">
           <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
           <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required disabled />
         </div>
@@ -504,7 +505,7 @@
         </div>
         <div class="display_controls">
           <div class="display_edit_controls">
-            <button class="default_button small green edit gray" disabled type="button">Edit</button>
+            <button class="default_button small green edit" disabled type="button">Edit</button>
           </div>
           <div class="display_save_controls">
             <button class="default_button small green save" disabled type="button">Save</button>
@@ -516,7 +517,8 @@
   </div>
   <div class="export_wrapper">
     <div class="export_content">
-      <button id="export_button" class="default_button green">Export Color List</button>
+      <button id="export_button" class="default_button green" type="button" disabled>Export Color List</button>
+      <button id="clear_page_button" class="default_button orange" type="button" disabled>Clear Page</button>
     </div>
   </div>
   <footer class="blue">

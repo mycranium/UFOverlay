@@ -19,21 +19,27 @@ const dm = {
     inpRows: document.querySelectorAll('.color_inputs'),
     allInps: document.querySelectorAll('#input_wrapper input'),
     enterBtn: document.getElementById('entry_button_enter'),
-    clearBtn: document.getElementById('entry_button_clear')
+    clearBtn: document.getElementById('entry_button_clear'),
+    cancelBtn: document.getElementById('entry_button_cancel')
   },
   d: {
     dWrap: document.getElementById('display_wrapper'),
     disp: document.querySelectorAll('.display'),
+    dispDefault: {name:"Gray",id:"1",values: [{name:"Gray",hex:"9C9C9C"},{name:"Gray",hex:"9C9C9C"},{name:"Gray",hex:"9C9C9C"},{name:"Gray",hex:"9C9C9C"},{name:"Gray",hex:"9C9C9C"}]},
     ed: document.querySelectorAll('.default_button.edit')
   },
-  expBtn: document.getElementById('export_button'),
+  x: {
+    expBtn: document.getElementById('export_button'),
+    resetBtn: document.getElementById('clear_page_button'),
+    expPnl: document.querySelector('.export_wrapper'),
+  },
+  db: {
+    srcFileObj: {},
+    newFileObj: {fams: []},
+    exportFileObj: {fams: []}
+  },
   draggables: document.querySelectorAll('.draggable'),
   containers: document.querySelectorAll('.dragContainer'),
-  colorRoles: ["bg", "pattern", "element", "override", "text"],
-  srcFileObj: {},
-  newFileObj: {fams: []},
-  exportFileObj: {fams: []},
-  dispDefault: {name:"Gray",id:"1",values: [{name:"Gray",hex:"9C9C9C"},{name:"Gray",hex:"9C9C9C"},{name:"Gray",hex:"9C9C9C"},{name:"Gray",hex:"9C9C9C"},{name:"Gray",hex:"9C9C9C"}]}
 }
 
 /* SWATCH POPULATION */
@@ -124,19 +130,6 @@ function resetDisplayOrder() {
   }
 }
 
-function editDisplayEvtHandler(e) {
-  let disp = e.target.closest('.display');
-  let sBtn = disp.querySelector('button.save');
-  let cBtn = disp.querySelector('button.cancel');
-  let inps = disp.querySelectorAll('input');
-  let inp;
-  for (inp of inps) { inp.removeAttribute('disabled'); }
-  toggleEditable(disp, "show");
-  toggleDraggables();
-  sBtn.addEventListener('click', editSaveEvtHandler);
-  cBtn.addEventListener('click', editSaveEvtHandler);
-}
-
 function restoreSavedFam(disp, def) {
   let rObj;
   let ref = parseInt(disp.getAttribute('data-ref'));
@@ -144,16 +137,14 @@ function restoreSavedFam(disp, def) {
   let colors = disp.querySelectorAll('.color');
   let c;
   if (def) {
-    rObj = dm.dispDefault; 
+    rObj = dm.d.dispDefault; 
   } else {
-    if (dm.newFileObj.fams.length == 0) {
-      rObj = dm.srcFileObj.fams[idx];
+    if (dm.db.newFileObj.fams.length == 0) {
+      rObj = dm.db.srcFileObj.fams[idx];
     } else {
-      rObj = dm.newFileObj.fams[idx];
+      rObj = dm.db.newFileObj.fams[idx];
     }
   }
-//  let editBtn = disp.querySelector('button.edit');
-//  let famDiv = disp.querySelector('.family');
   disp.querySelector('span.color_order').innerHTML = ref;
   disp.querySelector('input.family_name_edit').value = rObj.name;
   disp.querySelector('span.family_name').innerHTML = rObj.name;
@@ -164,11 +155,6 @@ function restoreSavedFam(disp, def) {
     let sampCell = colors[c].querySelector('.color_swatch');
      sampCell.style.backgroundColor = "#" + rObj.values[c].hex;
   }
-//  famDiv.classList.remove('gray');
-//  editBtn.classList.remove('gray');
-//  editBtn.removeAttribute('disabled');
-//  editBtn.addEventListener('click', editDisplayEvtHandler);
-//  disp.classList.remove('gray');
 }
 
 function toggleEditable(disp, show) {
@@ -194,8 +180,6 @@ function toggleEditable(disp, show) {
     cBtn.removeAttribute('disabled');
   } else {
     sPanel.classList.remove('shown');
-    set = "false"
-    forget = "true";
     for (inp of inps) {
       inp.removeAttribute('contenteditable');
       if (inp.classList.contains('color_hex_edit')) {
@@ -260,20 +244,20 @@ function sleep(ms) {
 }
 
 function readFile(input) {
-  dm.srcFileObj = {}
+  dm.db.srcFileObj = {}
   let file = input.files[0];
   let reader = new FileReader();
   reader.readAsText(file);
   reader.onload = function () {
     try {
-      dm.srcFileObj = JSON.parse(reader.result);
+      dm.db.srcFileObj = JSON.parse(reader.result);
     } catch (e) {
-      dm.srcFileObj = {}
+      dm.db.srcFileObj = {}
       alert(e);
     }
   };
   reader.onerror = function () {
-    dm.srcFileObj.error = reader.error;
+    dm.db.srcFileObj.error = reader.error;
   };
 }
 
@@ -288,7 +272,7 @@ function download(filename, text) {
 }
 
 function exportFile(backup) {
-  let fileData = (backup) ? dm.srcFileObj : dm.exportFileObj;
+  let fileData = (backup) ? dm.db.srcFileObj : dm.db.exportFileObj;
   let text = JSON.stringify(fileData);
   let filename = "Color-List";
   if (backup) {
@@ -316,20 +300,19 @@ function getDisplayData(disp, idx) {
 }
 
 function reorderObject() {
-  dm.exportFileObj = {fams:[]};
+  dm.db.exportFileObj = {fams:[]};
   let disps = document.querySelectorAll('.display');
   let colOrder;
   let d;
   for (d=0; d<disps.length; d++) {
     colOrder = disps[d].querySelector('span.color_order').innerHTML;
-    dm.exportFileObj.fams[parseInt(colOrder) - 1] = getDisplayData(disps[d], colOrder);
+    dm.db.exportFileObj.fams[parseInt(colOrder) - 1] = getDisplayData(disps[d], colOrder);
   }
 }
 
 function processEntryData(source) {
-  let fams = (source == "new") ? dm.newFileObj.fams : dm.srcFileObj.fams;
+  let fams = (source == "new") ? dm.db.newFileObj.fams : dm.db.srcFileObj.fams;
   let famCount = fams.length;
-  console.log(famCount);
   let f;
   for (f = 0; f < famCount; f++) { //in a family
     let famNum = f + 1;
@@ -347,33 +330,38 @@ function processEntryData(source) {
       }
     }
     let editBtn = dm.d.disp[f].querySelector('button.edit');
-    let famDiv = dm.d.disp[f].querySelector('.family');
     makeSwatches();
     if (source != "new" || f == famCount - 1) {
-      famDiv.classList.remove('gray');
-      editBtn.classList.remove('gray');
       editBtn.removeAttribute('disabled');
       editBtn.addEventListener('click', editDisplayEvtHandler);
-      dm.d.disp[f].classList.remove('gray');
       dm.d.disp[f].classList.remove('dim');
     }
   }
-  let newClass = (source == "new") ? "grow" : "grow2"; 
-  if (!dm.d.dWrap.classList.contains('grow') && !dm.d.dWrap.classList.contains('grow2')) {
-    dm.d.dWrap.classList.add(newClass);
+  let sleepMs = (source == "new") ? 0 : 700; 
+  if (!dm.d.dWrap.classList.contains('grow')) {
+      sleep(sleepMs).then(() => {
+      dm.d.dWrap.classList.add('grow');
+    });
   }
   if (famCount == 4) {
     let drag;
+    sleepMs = (source == "new") ? 1000 : 1700;
     for (drag of dm.draggables) {
       drag.setAttribute('draggable', "true");
     }
+    dm.x.expBtn.removeAttribute('disabled');
+    dm.x.resetBtn.removeAttribute('disabled');
+    dm.a.newBtn.setAttribute('disabled','');
+    sleep(sleepMs).then(() => {
+      if (!dm.x.expPnl.classList.contains('grow')) { dm.x.expPnl.classList.add('grow'); }
+    });
   }
 }
 
 function getEntryData() {
   let famObj = {};
   famObj.name = dm.e.famInp.value;
-  famObj.id = dm.newFileObj.fams.length + 1;
+  famObj.id = dm.db.newFileObj.fams.length + 1;
   famObj.values = [];
   let rows = dm.e.inpRows;
   let r;
@@ -400,18 +388,37 @@ function getEntryData() {
       famObj.values.push(thisColor);
     }
   }
-  dm.newFileObj.fams.push(famObj);
+  dm.db.newFileObj.fams.push(famObj);
   entryClearEvtHandler();
-  if (dm.newFileObj.fams.length >= 4) {
+  if (dm.db.newFileObj.fams.length >= 4) {
     animateEntryPanel("out");
     
   }
 }
 
+/* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
+/* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
+/* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
+function resetEvtHandler() {
+  let disp;
+  for (disp of dm.d.disp) {
+    restoreSavedFam(disp, true);
+    toggleEditable(disp, "hide");
+    disp.classList.add("dim")
+  }
+  sleep(1000).then(() => {
+      resetDisplayOrder();
+    });
+  toggleDraggables();
+  let edBtn;
+  for (edBtn of dm.d.ed) {
+    edBtn.setAttribute('disabled', '');
+  }
+  if (dm.d.dWrap.classList.contains('grow')) { dm.d.dWrap.classList.remove('grow'); }
+  dm.a.newBtn.removeAttribute('disabled');
+  dm.x.expPnl.classList.remove('grow');
+}
 
-/* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
-/* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
-/* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
 function exportEvtHandler() {
   reorderObject();
   exportFile(false)
@@ -419,23 +426,50 @@ function exportEvtHandler() {
 
 function editSaveEvtHandler(e) {
   let action = (e.target.classList.contains('save')) ? "save" : "cancel";
-  let disp = e.target.closest('.display');
-  let inps = disp.querySelectorAll('input');
-  let inp;
-  let famName = disp.querySelector('.family_name_edit').value;
-  let famSpan = disp.querySelector('span.family_name');
+  let thisDisp = e.target.closest('.display');
+  let inps = thisDisp.querySelectorAll('input');
+  let inp, disp;
+  let famName = thisDisp.querySelector('.family_name_edit').value;
+  let famSpan = thisDisp.querySelector('span.family_name');
   famSpan.innerHTML = famName;
   for (inp of inps) { inp.setAttribute('disabled', ''); }
-  toggleEditable(disp, "hide");
+  for (disp of dm.d.disp) {
+    if (disp.classList.contains('dim')) { disp.classList.remove("dim"); }
+  }
+  dm.x.resetBtn.removeAttribute('disabled');
+  dm.x.expBtn.removeAttribute('disabled');
+  
+  toggleEditable(thisDisp, "hide");
   if (action != "save") {
-    restoreSavedFam(disp, false);
+    restoreSavedFam(thisDisp, false);
     toggleDraggables();
   }
+}
+
+function editDisplayEvtHandler(e) {
+  let thisDisp = e.target.closest('.display');
+  let idx = thisDisp.getAttribute('data-ref');
+  let sBtn = thisDisp.querySelector('button.save');
+  let cBtn = thisDisp.querySelector('button.cancel');
+  let inps = thisDisp.querySelectorAll('input');
+  let inp, disp;
+  for (disp of dm.d.disp) {
+    if (disp.getAttribute('data-ref') !=idx) { disp.classList.add("dim"); }
+  }
+  for (inp of inps) { inp.removeAttribute('disabled'); }
+  toggleEditable(thisDisp, "show");
+  toggleDraggables();
+  dm.x.resetBtn.setAttribute('disabled', '');
+  dm.x.expBtn.setAttribute('disabled', '');
+  sBtn.addEventListener('click', editSaveEvtHandler);
+  cBtn.addEventListener('click', editSaveEvtHandler);
 }
 
 function fileCancelEvtHandler() {
   //  dm.f.msgPnl.classList.remove('fade');
   dm.f.loadPnl.classList.remove('grow');
+  dm.f.selBtn.value = "";
+  dm.f.procBtn.setAttribute('disabled', '');
 }
 
 function backupEventHandler(e) {
@@ -447,6 +481,7 @@ function backupEventHandler(e) {
   dm.f.procBtn.removeEventListener('click', processEvtHandler);
   dm.f.cxlBtn.removeEventListener('click', fileCancelEvtHandler);
   dm.a.newBtn.setAttribute('disabled',"");
+  dm.f.procBtn.setAttribute('disabled', '');
   dm.f.selBtn.value="";
   dm.f.msgPnl.classList.remove('fade');
   dm.f.loadPnl.classList.remove('grow');
@@ -461,6 +496,18 @@ function processEvtHandler() {
   dm.f.noBtn.addEventListener('click', backupEventHandler);
   resetDisplayOrder()
   readFile(input);
+}
+
+function selectFileEvtHandler(e) {
+  if (e.target.value != "") {
+    dm.f.procBtn.removeAttribute('disabled');
+    dm.f.procBtn.addEventListener('click', processEvtHandler);
+  }
+}
+
+function entryCancelEvtHandler() {
+  entryClearEvtHandler();
+  animateEntryPanel("out");
 }
 
 function entryClearEvtHandler() {
@@ -502,6 +549,7 @@ function scratchEventHandler() {
   for (dis of disabled) {dis.removeAttribute('disabled');}
   dm.e.enterBtn.addEventListener('click', entryEnterEvtHandler);
   dm.e.clearBtn.addEventListener('click', entryClearEvtHandler);
+  dm.e.cancelBtn.addEventListener('click', entryCancelEvtHandler);
   animateEntryPanel("in");
 }
 
@@ -516,10 +564,11 @@ function loadEventHandler() {
       dm.f.loadPnl.classList.add('grow');
     }
   }
-  dm.f.procBtn.addEventListener('click', processEvtHandler);
+  dm.f.selBtn.addEventListener('input', selectFileEvtHandler);
   dm.f.cxlBtn.addEventListener('click', fileCancelEvtHandler);
 }
 
 dm.a.newBtn.addEventListener('click', scratchEventHandler);
 dm.a.loadBtn.addEventListener('click', loadEventHandler);
-dm.expBtn.addEventListener('click', exportEvtHandler);
+dm.x.expBtn.addEventListener('click', exportEvtHandler);
+dm.x.resetBtn.addEventListener('click', resetEvtHandler);

@@ -41,7 +41,6 @@ div.main_content {
   background-color: #fff;
   width: 100%;
   padding: 0;
-  /*  margin-bottom: 1rem;*/
 }
 .default_button {
   border: none;
@@ -57,17 +56,17 @@ div.main_content {
   padding: .3rem 2rem;
   font-size: 1.1rem;
 }
+button.default_button[disabled] {
+  background-color: #AAA;
+}
+button.default_button[disabled]:hover {
+  background-color: #AAA;
+}
 .default_button.green {
   background-color: #23B500;
 }
 .default_button.green:hover {
   background-color: #2EF100;
-}
-.default_button.edit.gray {
-  background-color: #999;
-}
-.default_button.edit.gray:hover {
-  background-color: #999;
 }
 .default_button.red {
   background-color: #C00303;
@@ -86,6 +85,12 @@ div.main_content {
 }
 .default_button.purple:hover {
   background-color: #C735FF;
+}
+.default_button.orange {
+  background-color: #D85E00;
+}
+.default_button.orange:hover {
+  background-color: #FF923E;
 }
 /* INITIAL ACTION AREA INITIAL ACTION AREA INITIAL ACTION AREA INITIAL ACTION AREA */
 /* INITIAL ACTION AREA INITIAL ACTION AREA INITIAL ACTION AREA INITIAL ACTION AREA */
@@ -136,7 +141,6 @@ button.actions.load {
 button.actions.load:hover {
   background-color: #C735FF;
 }
-
 input[disabled] {
   color: #000;
 }
@@ -286,7 +290,7 @@ div.file_warning_buttons {
   margin: 0 auto 0;
   height: 0;
   opacity: 0;
-  transition: all .7s ease;
+  transition: all 1s ease;
   overflow: hidden;
 }
 .container {
@@ -391,7 +395,7 @@ ul.color_inputs:nth-child(5) {
   font-size: 1rem;
   border: 1px solid black;
   background-color: #fff;
-  padding:0;
+  padding: 0;
 }
 #input_content input::placeholder {
   font-size: .8rem;
@@ -399,20 +403,19 @@ ul.color_inputs:nth-child(5) {
   background-color: #fff;
   opacity: 1;
   border: 1px solid black;
-  padding:0;
+  padding: 0;
 }
 #input_content input:valid {
   background-color: #dfd;
 }
 #input_content input:invalid {
   background-color: #fdd;
-  padding:0;
+  padding: 0;
 }
 .color_inputs p {
   margin: 0 0 .1rem 0;
   padding: 0;
 }
-
 div#color_inputs_enter_wrapper {
   position: relative;
   overflow: hidden;
@@ -502,12 +505,7 @@ div.display_wrap {
 div.display_wrap.grow {
   padding: 2rem 2rem;
   height: 39rem;
-  transition: all 1s ease;
-}
-div.display_wrap.grow2 {
-  padding: 2rem 2rem;
-  height: 39rem;
-  transition: all 1s ease .7s;
+  transition: all 1s ease-in;
 }
 div.display {
   position: relative;
@@ -516,6 +514,7 @@ div.display {
   width: 25%;
   height: 35rem;
   max-height: 35rem;
+  min-width: 16rem;
   margin: 0;
   padding: 0;
   border: 2px solid #00227f;
@@ -527,16 +526,6 @@ div.display.dim {
   opacity: .3;
   transition: all 1s ease-in;
 }
-/*
-div.display.gray {
-  background-color: #E9E9E9;
-  border-color: #9C9C9C;
-  color: #9C9C9C
-}
-div.family.gray {
-  background-color: #9C9C9C;
-}
-*/
 div.data {
   font-size: 100%;
 }
@@ -545,7 +534,7 @@ div.family {
   background-color: #00227f;
   border-top-left-radius: .8rem;
   border-top-right-radius: .8rem;
-  text-align:center;
+  text-align: center;
   height: 2.2rem;
 }
 div.family h3 {
@@ -568,14 +557,14 @@ input.family_name_edit {
   width: 84%;
   line-height: 1.6rem;
   height: 1.6rem;
-  border: none;border-radius: .3rem;
+  border: none;
+  border-radius: .3rem;
   background-color: #9C9C9C;
   background-color: #FFF;
   padding: 0;
   top: -1.9rem;
   z-index: -1;
 }
-
 input.family_name_edit[contenteditable] {
   background-color: #CEF;
 }
@@ -585,8 +574,6 @@ input.family_name_edit[contenteditable]:invalid {
 input.family_name_edit[contenteditable]:valid {
   background-color: #CFC;
 }
-
-
 div.values {
   display: flex;
   flex-flow: column nowrap;
@@ -613,19 +600,16 @@ ul.color_text {
   padding: 0;
   text-align: right;
 }
-ul.color_text li{
-margin-bottom: .2em;  
+ul.color_text li {
+  margin-bottom: .2em;
 }
-ul.color_text li:last-child{
-margin-bottom: 0;  
+ul.color_text li:last-child {
+  margin-bottom: 0;
 }
 div.color_sample {
   display: inline-flex;
   flex-flow: row nowrap;
   justify-content: center;
-}
-.gray .color_swatch {
-  background-color: #B4B4B4;
 }
 div.color_swatch {
   width: 5rem;
@@ -636,8 +620,6 @@ div.color_swatch {
 div.family_name label {
   display: inline-block;
 }
-
-
 .color input {
   font-size: 1.1rem;
   text-align: right;
@@ -653,11 +635,6 @@ div.family_name label {
 .color .color_text input[contenteditable]:valid {
   background-color: #CFC;
 }
-/*
-.gray .color input {color: #9C9C9C;
-  background-color: #E9E9E9;
-}
-*/
 .data {
   width: 100%
 }
@@ -667,8 +644,8 @@ div.family_name label {
   height: 3.4rem;
 }
 .display_edit_controls {
-  position:relative;
-  display:flex;
+  position: relative;
+  display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   align-content: center;
@@ -678,9 +655,9 @@ div.family_name label {
   z-index: 2;
 }
 .display_save_controls {
-  visibility:hidden;
-  position:relative;
-  display:flex;
+  visibility: hidden;
+  position: relative;
+  display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   align-content: center;
@@ -703,13 +680,9 @@ div.family_name label {
   transition: all 1s;
 }
 div.data div.display_controls button.default_button {
-  position:relative;
+  position: relative;
   width: 6rem;
   padding: .3rem 0;
-  
-}
-button.default_button.edit {
-/* z-index:1; */
 }
 button.default_button {
   display: inline-block;
@@ -719,14 +692,14 @@ button.default_button {
   transition-duration: .5s;
 }
 button.default_button.invisible {
-  display:inline-block;
+  display: inline-block;
   opacity: 0;
   transition-property: opacity, display;
   transition-delay: 0s, .5s;
   transition-duration: .5s, 0s;
 }
 button.default_button.hidden {
-  display:none;
+  display: none;
   transition-property: display;
   transition-delay: .5s;
   transition-duration: 0s;
@@ -778,13 +751,23 @@ button.default_button.cancel.hidden {}
 /* EXPORT SECTION EXPORT SECTION EXPORT SECTION EXPORT SECTION EXPORT SECTION */
 /* EXPORT SECTION EXPORT SECTION EXPORT SECTION EXPORT SECTION EXPORT SECTION */
 .export_wrapper {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   margin: 0;
+  padding: 0 0;
+  height: 0rem;
+  transition: all .7s ease;
+}
+.export_wrapper.grow {
+  height: 5rem;
   padding: 0 2rem;
+  transition: all .4s ease-out;
 }
 .export_content {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
+  gap: 1rem;
   padding: 1rem;
 }

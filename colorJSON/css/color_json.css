@@ -118,18 +118,27 @@ button.actions {
   width: 15rem;
   border: none;
 }
-button#edit_file.actions {}
 button.actions.scratch {
   background-color: #1D56C0;
-}
-button.actions.load {
-  background-color: #9D00D8;
 }
 button.actions.scratch:hover {
   background-color: #3276F5;
 }
+button.actions[disabled] {
+  background-color: #AAA;
+}
+button.actions[disabled]:hover {
+  background-color: #AAA;
+}
+button.actions.load {
+  background-color: #9D00D8;
+}
 button.actions.load:hover {
   background-color: #C735FF;
+}
+
+input[disabled] {
+  color: #000;
 }
 /* FILE SELECT PANEL FILE SELECT PANEL FILE SELECT PANEL FILE SELECT PANEL */
 /* FILE SELECT PANEL FILE SELECT PANEL FILE SELECT PANEL FILE SELECT PANEL */
@@ -145,7 +154,6 @@ button.actions.load:hover {
 }
 #file_selector_panel.grow {
   height: 7rem;
-  /*  padding: 1rem 2rem;*/
   opacity: 1;
   transition: all .7s ease;
 }
@@ -480,22 +488,46 @@ div#color_inputs_message.slide {
 /* COLOR FAMILY DISPLAY AREA COLOR FAMILY DISPLAY AREA COLOR FAMILY DISPLAY AREA */
 /* COLOR FAMILY DISPLAY AREA COLOR FAMILY DISPLAY AREA COLOR FAMILY DISPLAY AREA */
 div.display_wrap {
+  position: relative;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
   gap: 1rem;
   background-color: #ccc;
-  padding: 2rem;
+  height: 0;
+  padding: 0 2rem;
+  overflow: hidden;
+  transition: all 1s ease;
+}
+div.display_wrap.grow {
+  padding: 2rem 2rem;
+  height: 39rem;
+  transition: all 1s ease;
+}
+div.display_wrap.grow2 {
+  padding: 2rem 2rem;
+  height: 39rem;
+  transition: all 1s ease .7s;
 }
 div.display {
-  align-self: stretch;
+  position: relative;
   border-radius: .9rem;
   background-color: #fff;
   width: 25%;
+  height: 35rem;
+  max-height: 35rem;
   margin: 0;
   padding: 0;
   border: 2px solid #00227f;
+  opacity: 1;
+  overflow: hidden;
+  transition: all 1s ease;
 }
+div.display.dim {
+  opacity: .3;
+  transition: all 1s ease-in;
+}
+/*
 div.display.gray {
   background-color: #E9E9E9;
   border-color: #9C9C9C;
@@ -504,15 +536,11 @@ div.display.gray {
 div.family.gray {
   background-color: #9C9C9C;
 }
+*/
 div.data {
   font-size: 100%;
 }
 div.family {
-/*
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-*/
   position: relative;
   background-color: #00227f;
   border-top-left-radius: .8rem;
@@ -523,7 +551,6 @@ div.family {
 div.family h3 {
   position: relative;
   color: white;
-/*  display:inline-block;*/
   text-align: center;
   font-size: 1.17rem;
   font-weight: bold;
@@ -626,9 +653,11 @@ div.family_name label {
 .color .color_text input[contenteditable]:valid {
   background-color: #CFC;
 }
+/*
 .gray .color input {color: #9C9C9C;
   background-color: #E9E9E9;
 }
+*/
 .data {
   width: 100%
 }
@@ -657,7 +686,6 @@ div.family_name label {
   align-content: center;
   align-items: center;
   gap: .7rem;
-/*  position: absolute;*/
   text-align: center;
   background-color: #FFF;
   height: 3.4rem;

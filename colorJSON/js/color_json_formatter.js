@@ -17,10 +17,12 @@ const dm = {
     dPnl: document.getElementById('input_wrapper'),
     famInp: document.getElementById('input_family'),
     inpRows: document.querySelectorAll('.color_inputs'),
+    allInps: document.querySelectorAll('#input_wrapper input'),
     enterBtn: document.getElementById('entry_button_enter'),
     clearBtn: document.getElementById('entry_button_clear')
   },
   d: {
+    dWrap: document.getElementById('display_wrapper'),
     disp: document.querySelectorAll('.display'),
     ed: document.querySelectorAll('.default_button.edit')
   },
@@ -59,6 +61,7 @@ function updateSwatch(e) {
     swatch.style.backgroundColor = "#" + inp.value;
   }
 }
+
 /* DRAG BEHAVIORS */
 dm.draggables.forEach(draggable => {
   draggable.addEventListener('dragstart', () => {
@@ -108,6 +111,7 @@ function getDragAfterElement(container, x) {
 }
 
 /* FUNCTIONS */
+
 function resetDisplayOrder() {
   let oldDisps = document.querySelectorAll('.display');
   let wrap = document.getElementById('display_wrapper');
@@ -124,6 +128,9 @@ function editDisplayEvtHandler(e) {
   let disp = e.target.closest('.display');
   let sBtn = disp.querySelector('button.save');
   let cBtn = disp.querySelector('button.cancel');
+  let inps = disp.querySelectorAll('input');
+  let inp;
+  for (inp of inps) { inp.removeAttribute('disabled'); }
   toggleEditable(disp, "show");
   toggleDraggables();
   sBtn.addEventListener('click', editSaveEvtHandler);
@@ -292,70 +299,6 @@ function exportFile(backup) {
   //    clearEverything();
 }
 
-function processEntryData(source) {
-  let fams = (source == "new") ? dm.newFileObj.fams : dm.srcFileObj.fams;
-  let famCount = fams.length;
-  let f;
-  for (f = 0; f < famCount; f++) { //in a family
-    let famNum = f + 1;
-    if (source != "new" || f == famCount - 1) {
-      dm.d.disp[f].querySelector('span.color_order').innerHTML = famNum;
-      dm.d.disp[f].querySelector('input.family_name_edit').value = fams[f].name;
-      dm.d.disp[f].querySelector('span.family_name').innerHTML = fams[f].name;
-    }
-    let colors = dm.d.disp[f].querySelectorAll('.color');
-    let c;
-    for (c = 0; c < colors.length; c++) {
-      if (source != "new" || f == famCount - 1) {
-        colors[c].querySelector('.color_name_edit').value = fams[f].values[c].name;
-        colors[c].querySelector('.color_hex_edit').value = fams[f].values[c].hex;
-      }
-    }
-    let editBtn = dm.d.disp[f].querySelector('button.edit');
-    let famDiv = dm.d.disp[f].querySelector('.family');
-    makeSwatches();
-    if (source != "new" || f == famCount - 1) {
-      famDiv.classList.remove('gray');
-      editBtn.classList.remove('gray');
-      editBtn.removeAttribute('disabled');
-      editBtn.addEventListener('click', editDisplayEvtHandler);
-      dm.d.disp[f].classList.remove('gray');
-    }
-  }
-}
-
-function getEntryData() {
-  let famObj = {};
-  famObj.name = dm.e.famInp.value;
-  famObj.id = dm.newFileObj.fams.length + 1;
-  famObj.values = [];
-  let rows = dm.e.inpRows;
-  let row;
-  for (row of rows) {
-    let thisColor = {};
-    let inps = row.querySelectorAll('input');
-    let inp;
-    for (inp of inps) {
-      if (inp.classList.contains('color_name')) {
-        thisColor.name = (inp.value == "") ? "Unnamed" : inp.value;
-      }
-      if (inp.classList.contains('color_hex')) {
-        let inpVal = inp.value;
-        if (inpVal.includes("#")) {
-          inpVal = inpVal.replace("#", "");
-        }
-        thisColor.hex = inpVal.toUpperCase();
-      }
-    }
-    famObj.values.push(thisColor);
-  }
-  dm.newFileObj.fams.push(famObj);
-  entryClearEvtHandler();
-  if (dm.newFileObj.fams.length >= 4) {
-    animateEntryPanel("out");
-  }
-}
-
 function getDisplayData(disp, idx) {
   let outFam = {};
   outFam.name = disp.querySelector('span.family_name').innerHTML;
@@ -383,6 +326,89 @@ function reorderObject() {
   }
 }
 
+function processEntryData(source) {
+  let fams = (source == "new") ? dm.newFileObj.fams : dm.srcFileObj.fams;
+  let famCount = fams.length;
+  console.log(famCount);
+  let f;
+  for (f = 0; f < famCount; f++) { //in a family
+    let famNum = f + 1;
+    if (source != "new" || f == famCount - 1) {
+      dm.d.disp[f].querySelector('span.color_order').innerHTML = famNum;
+      dm.d.disp[f].querySelector('input.family_name_edit').value = fams[f].name;
+      dm.d.disp[f].querySelector('span.family_name').innerHTML = fams[f].name;
+    }
+    let colors = dm.d.disp[f].querySelectorAll('.color');
+    let c;
+    for (c = 0; c < colors.length; c++) {
+      if (source != "new" || f == famCount - 1) {
+        colors[c].querySelector('.color_name_edit').value = fams[f].values[c].name;
+        colors[c].querySelector('.color_hex_edit').value = fams[f].values[c].hex;
+      }
+    }
+    let editBtn = dm.d.disp[f].querySelector('button.edit');
+    let famDiv = dm.d.disp[f].querySelector('.family');
+    makeSwatches();
+    if (source != "new" || f == famCount - 1) {
+      famDiv.classList.remove('gray');
+      editBtn.classList.remove('gray');
+      editBtn.removeAttribute('disabled');
+      editBtn.addEventListener('click', editDisplayEvtHandler);
+      dm.d.disp[f].classList.remove('gray');
+      dm.d.disp[f].classList.remove('dim');
+    }
+  }
+  let newClass = (source == "new") ? "grow" : "grow2"; 
+  if (!dm.d.dWrap.classList.contains('grow') && !dm.d.dWrap.classList.contains('grow2')) {
+    dm.d.dWrap.classList.add(newClass);
+  }
+  if (famCount == 4) {
+    let drag;
+    for (drag of dm.draggables) {
+      drag.setAttribute('draggable', "true");
+    }
+  }
+}
+
+function getEntryData() {
+  let famObj = {};
+  famObj.name = dm.e.famInp.value;
+  famObj.id = dm.newFileObj.fams.length + 1;
+  famObj.values = [];
+  let rows = dm.e.inpRows;
+  let r;
+  for (r=0; r<rows.length; r++) {
+    let thisColor = {};
+    let inpName = rows[r].getElementsByClassName('color_name')[0].value;
+    let inpVal = rows[r].getElementsByClassName('color_hex')[0].value;
+    if (inpVal.includes("#")) {
+      inpVal = inpVal.replace("#", "");
+    }
+    if (inpVal != "") {
+      thisColor.name = (inpName == "") ? "Unnamed" : inpName;
+      thisColor.hex = inpVal.toUpperCase();
+      famObj.values.push(thisColor);
+    } else {
+      let refColor;
+      if (r == 3) {
+        refColor = famObj.values[2];
+      } else if (r == 4) {
+        refColor = famObj.values[0];
+      }
+      thisColor.name = (inpName == "") ? refColor.name : inpName;
+      thisColor.hex = refColor.hex;
+      famObj.values.push(thisColor);
+    }
+  }
+  dm.newFileObj.fams.push(famObj);
+  entryClearEvtHandler();
+  if (dm.newFileObj.fams.length >= 4) {
+    animateEntryPanel("out");
+    
+  }
+}
+
+
 /* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
 /* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
 /* EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS EVENT HANDLERS */
@@ -390,32 +416,62 @@ function exportEvtHandler() {
   reorderObject();
   exportFile(false)
 }
+
 function editSaveEvtHandler(e) {
   let action = (e.target.classList.contains('save')) ? "save" : "cancel";
   let disp = e.target.closest('.display');
+  let inps = disp.querySelectorAll('input');
+  let inp;
   let famName = disp.querySelector('.family_name_edit').value;
   let famSpan = disp.querySelector('span.family_name');
   famSpan.innerHTML = famName;
-  if (action == "save") {
-    toggleEditable(disp, "hide");
-  } else {
-    toggleEditable(disp, "hide");
+  for (inp of inps) { inp.setAttribute('disabled', ''); }
+  toggleEditable(disp, "hide");
+  if (action != "save") {
     restoreSavedFam(disp, false);
     toggleDraggables();
   }
 }
 
-function entryClearEvtHandler() {
-  const clrInputs = dm.e.dPnl.querySelectorAll('input');
-  for (let clrInp of clrInputs) {
-    clrInp.value = "";
+function fileCancelEvtHandler() {
+  //  dm.f.msgPnl.classList.remove('fade');
+  dm.f.loadPnl.classList.remove('grow');
+}
+
+function backupEventHandler(e) {
+  if (e.target.id.includes('yes')) {
+    exportFile(true);
   }
+  dm.f.yesBtn.removeEventListener('click', backupEventHandler);
+  dm.f.noBtn.removeEventListener('click', backupEventHandler);
+  dm.f.procBtn.removeEventListener('click', processEvtHandler);
+  dm.f.cxlBtn.removeEventListener('click', fileCancelEvtHandler);
+  dm.a.newBtn.setAttribute('disabled',"");
+  dm.f.selBtn.value="";
+  dm.f.msgPnl.classList.remove('fade');
+  dm.f.loadPnl.classList.remove('grow');
+
+  processEntryData("file");
+}
+
+function processEvtHandler() {
+  dm.f.msgPnl.classList.add('fade');
+  let input = dm.f.selBtn;
+  dm.f.yesBtn.addEventListener('click', backupEventHandler);
+  dm.f.noBtn.addEventListener('click', backupEventHandler);
+  resetDisplayOrder()
+  readFile(input);
+}
+
+function entryClearEvtHandler() {
+  let inp;
+  for (inp of dm.e.allInps) { inp.value = ""; }
 }
 
 function entryEnterEvtHandler() {
   let valMsg = "Fields in pink are reqired. ";
   let validity = [true, true];
-  let hexes = document.querySelectorAll('.color_hex');
+  let hexes = document.querySelectorAll('.color_hex[required]');
   let famName = dm.e.famInp;
   if (!famName.validity.valid) {
     validity[0] = false;
@@ -440,35 +496,12 @@ function entryEnterEvtHandler() {
   }
 }
 
-function fileCancelEvtHandler() {
-  //  dm.f.msgPnl.classList.remove('fade');
-  dm.f.loadPnl.classList.remove('grow');
-}
-
-function backupEventHandler(e) {
-  if (e.target.id.includes('yes')) {
-    exportFile(true);
-  }
-  dm.f.yesBtn.removeEventListener('click', backupEventHandler);
-  dm.f.noBtn.removeEventListener('click', backupEventHandler);
-  dm.f.procBtn.removeEventListener('click', processEvtHandler);
-  dm.f.cxlBtn.removeEventListener('click', fileCancelEvtHandler);
-  dm.f.msgPnl.classList.remove('fade');
-  dm.f.loadPnl.classList.remove('grow');
-
-  processEntryData("file");
-}
-
-function processEvtHandler() {
-  dm.f.msgPnl.classList.add('fade');
-  let input = dm.f.selBtn;
-  dm.f.yesBtn.addEventListener('click', backupEventHandler);
-  dm.f.noBtn.addEventListener('click', backupEventHandler);
-  resetDisplayOrder()
-  readFile(input);
-}
-
 function scratchEventHandler() {
+  let disabled = dm.e.dPnl.querySelectorAll('[disabed]');
+  let dis;
+  for (dis of disabled) {dis.removeAttribute('disabled');}
+  dm.e.enterBtn.addEventListener('click', entryEnterEvtHandler);
+  dm.e.clearBtn.addEventListener('click', entryClearEvtHandler);
   animateEntryPanel("in");
 }
 
@@ -489,6 +522,4 @@ function loadEventHandler() {
 
 dm.a.newBtn.addEventListener('click', scratchEventHandler);
 dm.a.loadBtn.addEventListener('click', loadEventHandler);
-dm.e.enterBtn.addEventListener('click', entryEnterEvtHandler);
-dm.e.clearBtn.addEventListener('click', entryClearEvtHandler);
 dm.expBtn.addEventListener('click', exportEvtHandler);

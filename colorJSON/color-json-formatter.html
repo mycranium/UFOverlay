@@ -36,7 +36,7 @@
             <input id="input_family" type="text" class="scratch" value="" autocomplete="off" minlength="3" maxlength="15" placeholder="Required. 15 characters max." pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required>
           </div>
           <div class="inputs flex_container_column">
-            <ul class="color_inputs flex_container_row">
+            <ul class="color_inputs flex_container_row required">
               <li>
                 <p>Color 1</p>
                 <p>(Background)</p>
@@ -50,7 +50,7 @@
                 <input id="color_1_hex" type="text" autocomplete="off" class="color_hex" placeholder="Required" maxlength="7" ninlength="6" pattern="#?[0-9a-fA-F]{6}" required />
               </li>
             </ul>
-            <ul class="color_inputs flex_container_row">
+            <ul class="color_inputs flex_container_row required">
               <li>
                 <p>Color 2</p>
                 <p>(Pattern)</p>
@@ -64,7 +64,7 @@
                 <input id="color_2_hex" type="text" autocomplete="off" class="color_hex" placeholder="Required" pattern="#?[0-9a-fA-F]{6}" required />
               </li>
             </ul>
-            <ul class="color_inputs flex_container_row">
+            <ul class="color_inputs flex_container_row required">
               <li>
                 <p>Color 3</p>
                 <p>(Element)</p>
@@ -78,7 +78,7 @@
                 <input id="color_3_hex" type="text" autocomplete="off" class="color_hex" placeholder="Required" pattern="#?[0-9a-fA-F]{6}" required />
               </li>
             </ul>
-            <ul class="color_inputs flex_container_row">
+            <ul class="color_inputs flex_container_row optional">
               <li>
                 <p>Color 4</p>
                 <p>(Override)</p>
@@ -92,7 +92,7 @@
                 <input id="color_4_hex" type="text" autocomplete="off" class="color_hex" placeholder="Optional" pattern="[#?0-9a-fA-F]{6}" />
               </li>
             </ul>
-            <ul class="color_inputs flex_container_row">
+            <ul class="color_inputs flex_container_row optional">
               <li>
                 <p>Color 5</p>
                 <p>(Text)</p>
@@ -156,21 +156,21 @@
     </div>
   </div>
   <!-- DATA DISPLAY PANEL-->
-  <div id="display_wrapper" class="display_wrap dragContainer">
-    <div class="display draggable gray" draggable="true" data-ref="1">
+  <div id="display_wrapper" class="display_wrap dragContainer shrink">
+    <div class="display draggable gray dim" draggable="false" data-ref="1">
       <div class="data">
         <div class="family gray">
           <h3>Family <span class="color_order">1</span>: <span class="family_name">Empty</span></h3>
-          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required>
+          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required disabled />
         </div>
         <div class="values">
           <div class="color color_1">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Background</li>
             </ul>
@@ -181,10 +181,10 @@
           <div class="color color_2">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Pattern</li>
             </ul>
@@ -195,10 +195,10 @@
           <div class="color color_3">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Dell Element</li>
             </ul>
@@ -209,10 +209,10 @@
           <div class="color color_4">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Override</li>
             </ul>
@@ -223,10 +223,10 @@
           <div class="color color_5">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Text</li>
             </ul>
@@ -246,20 +246,20 @@
         </div>
       </div>
     </div>
-    <div class="display draggable gray" draggable="true" data-ref="2">
+    <div class="display draggable gray dim" draggable="false" data-ref="2">
       <div class="data">
         <div class="family gray">
           <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
-          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required>
+          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required disabled />
         </div>
         <div class="values">
           <div class="color color_1">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Background</li>
             </ul>
@@ -270,10 +270,10 @@
           <div class="color color_2">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Pattern</li>
             </ul>
@@ -284,10 +284,10 @@
           <div class="color color_3">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Dell Element</li>
             </ul>
@@ -298,10 +298,10 @@
           <div class="color color_4">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Override</li>
             </ul>
@@ -312,10 +312,10 @@
           <div class="color color_5">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Text</li>
             </ul>
@@ -335,20 +335,20 @@
         </div>
       </div>
     </div>
-    <div class="display draggable gray" draggable="true" data-ref="3">
+    <div class="display draggable gray dim" draggable="false" data-ref="3">
       <div class="data">
         <div class="family gray">
           <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
-          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required>
+          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required disabled />
         </div>
         <div class="values">
           <div class="color color_1">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Background</li>
             </ul>
@@ -359,10 +359,10 @@
           <div class="color color_2">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Pattern</li>
             </ul>
@@ -373,10 +373,10 @@
           <div class="color color_3">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Dell Element</li>
             </ul>
@@ -387,10 +387,10 @@
           <div class="color color_4">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Override</li>
             </ul>
@@ -401,10 +401,10 @@
           <div class="color color_5">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Text</li>
             </ul>
@@ -424,20 +424,20 @@
         </div>
       </div>
     </div>
-    <div class="display draggable gray" draggable="true" data-ref="4">
+    <div class="display draggable gray dim" draggable="false" data-ref="4">
       <div class="data">
         <div class="family gray">
           <h3>Family <span class="color_order">2</span>: <span class="family_name">Empty</span></h3>
-          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required>
+          <input type="text" class="family_name_edit" value="Empty" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,}){0,2}" required disabled />
         </div>
         <div class="values">
           <div class="color color_1">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Background</li>
             </ul>
@@ -448,10 +448,10 @@
           <div class="color color_2">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Pattern</li>
             </ul>
@@ -462,10 +462,10 @@
           <div class="color color_3">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Dell Element</li>
             </ul>
@@ -476,10 +476,10 @@
           <div class="color color_4">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Override</li>
             </ul>
@@ -490,10 +490,10 @@
           <div class="color color_5">
             <ul class="color_text">
               <li class="color_name">
-                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required />
+                <input type="text" class="color_name_edit" value="Gray" autocomplete="off" minlength="3" maxlength="15" pattern="[A-Za-z]\w{0,10}( {1}\w{1,5}){0,2}" required disabled />
               </li>
               <li class="color_hex_val">
-                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required />
+                <input type="text" class="color_hex_edit" value="9C9C9C" autocomplete="off" minlength="6" maxlength="7" pattern="[#?0-9a-fA-F]{6}" required disabled />
               </li>
               <li class="color_role">Text</li>
             </ul>

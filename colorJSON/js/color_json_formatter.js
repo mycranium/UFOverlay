@@ -34,8 +34,8 @@ const dm = {
     expPnl: document.querySelector('.export_wrapper'),
   },
   db: {
-    srcFileObj: {},
-    newFileObj: {fams: []},
+//    srcFileObj: {},
+    fileObj: {fams: []},
     exportFileObj: {fams: []}
   },
   draggables: document.querySelectorAll('.draggable'),
@@ -61,9 +61,7 @@ function updateSwatch(e) {
   if (e.target.validity.valid) {
     let inp = e.target;
     let cont = inp.closest('.color');
-//    console.log(cont);
     let swatch = cont.querySelector('.color_swatch');
-//    console.log(swatch);
     swatch.style.backgroundColor = "#" + inp.value;
   }
 }
@@ -137,15 +135,11 @@ function restoreSavedFam(disp, def) {
   let colors = disp.querySelectorAll('.color');
   let c;
   if (def) {
-    rObj = dm.d.dispDefault; 
+    rObj = dm.d.dispDefault;
+    disp.querySelector('span.color_order').innerHTML = ref;
   } else {
-    if (dm.db.newFileObj.fams.length == 0) {
-      rObj = dm.db.srcFileObj.fams[idx];
-    } else {
-      rObj = dm.db.newFileObj.fams[idx];
-    }
+    rObj = dm.db.fileObj.fams[idx];
   }
-  disp.querySelector('span.color_order').innerHTML = ref;
   disp.querySelector('input.family_name_edit').value = rObj.name;
   disp.querySelector('span.family_name').innerHTML = rObj.name;
   for (c = 0; c < colors.length; c++) {
@@ -244,20 +238,20 @@ function sleep(ms) {
 }
 
 function readFile(input) {
-  dm.db.srcFileObj = {}
+  dm.db.fileObj = {}
   let file = input.files[0];
   let reader = new FileReader();
   reader.readAsText(file);
   reader.onload = function () {
     try {
-      dm.db.srcFileObj = JSON.parse(reader.result);
+      dm.db.fileObj = JSON.parse(reader.result);
     } catch (e) {
-      dm.db.srcFileObj = {}
+      dm.db.fileObj = {}
       alert(e);
     }
   };
   reader.onerror = function () {
-    dm.db.srcFileObj.error = reader.error;
+    dm.db.fileObj.error = reader.error;
   };
 }
 
@@ -272,15 +266,14 @@ function download(filename, text) {
 }
 
 function exportFile(backup) {
-  let fileData = (backup) ? dm.db.srcFileObj : dm.db.exportFileObj;
+  let fileData = (backup) ? dm.db.fileObj : dm.db.exportFileObj;
   let text = JSON.stringify(fileData);
   let filename = "Color-List";
   if (backup) {
     filename += "_" + formatDate();
   }
   filename += ".json";
-  download(filename, text)
-  //    clearEverything();
+  download(filename, text);
 }
 
 function getDisplayData(disp, idx) {
@@ -311,13 +304,13 @@ function reorderObject() {
 }
 
 function processEntryData(source) {
-  let fams = (source == "new") ? dm.db.newFileObj.fams : dm.db.srcFileObj.fams;
+  let fams = dm.db.fileObj.fams;
   let famCount = fams.length;
   let f;
-  for (f = 0; f < famCount; f++) { //in a family
+  for (f = 0; f < famCount; f++) {
     let famNum = f + 1;
+    dm.d.disp[f].querySelector('span.color_order').innerHTML = famNum;
     if (source != "new" || f == famCount - 1) {
-      dm.d.disp[f].querySelector('span.color_order').innerHTML = famNum;
       dm.d.disp[f].querySelector('input.family_name_edit').value = fams[f].name;
       dm.d.disp[f].querySelector('span.family_name').innerHTML = fams[f].name;
     }
@@ -361,7 +354,7 @@ function processEntryData(source) {
 function getEntryData() {
   let famObj = {};
   famObj.name = dm.e.famInp.value;
-  famObj.id = dm.db.newFileObj.fams.length + 1;
+  famObj.id = dm.db.fileObj.fams.length + 1;
   famObj.values = [];
   let rows = dm.e.inpRows;
   let r;
@@ -388,9 +381,9 @@ function getEntryData() {
       famObj.values.push(thisColor);
     }
   }
-  dm.db.newFileObj.fams.push(famObj);
+  dm.db.fileObj.fams.push(famObj);
   entryClearEvtHandler();
-  if (dm.db.newFileObj.fams.length >= 4) {
+  if (dm.db.fileObj.fams.length >= 4) {
     animateEntryPanel("out");
     
   }
@@ -427,23 +420,34 @@ function exportEvtHandler() {
 function editSaveEvtHandler(e) {
   let action = (e.target.classList.contains('save')) ? "save" : "cancel";
   let thisDisp = e.target.closest('.display');
+  if (action == "save") {
+    let c;
+    let colors = thisDisp.querySelectorAll('.color_text');
+    let ref = thisDisp.getAttribute('data-ref');
+    let idx = ref - 1;
+    let fam = dm.db.fileObj.fams[idx];
+    let famName = thisDisp.querySelector('.family_name_edit').value;
+    let famSpan = thisDisp.querySelector('span.family_name');
+    famSpan.innerHTML = famName;
+    fam.name = famName;
+    for (c=0; c<colors.length; c++) {
+      fam.values[c].name = colors[c].querySelector('.color_name_edit').value;
+      fam.values[c].hex = colors[c].querySelector('.color_hex_edit').value;
+    }
+  } else {
+    restoreSavedFam(thisDisp, false);
+  }  
   let inps = thisDisp.querySelectorAll('input');
-  let inp, disp;
-  let famName = thisDisp.querySelector('.family_name_edit').value;
-  let famSpan = thisDisp.querySelector('span.family_name');
-  famSpan.innerHTML = famName;
+  let inp, d;
   for (inp of inps) { inp.setAttribute('disabled', ''); }
-  for (disp of dm.d.disp) {
-    if (disp.classList.contains('dim')) { disp.classList.remove("dim"); }
+  let famCount = dm.db.fileObj.fams.length;
+  for (d=0; d<famCount; d++) {
+    if (dm.d.disp[d].classList.contains('dim')) { dm.d.disp[d].classList.remove("dim"); }
   }
   dm.x.resetBtn.removeAttribute('disabled');
   dm.x.expBtn.removeAttribute('disabled');
-  
   toggleEditable(thisDisp, "hide");
-  if (action != "save") {
-    restoreSavedFam(thisDisp, false);
-    toggleDraggables();
-  }
+  if (famCount >= 4 ) { toggleDraggables(); }
 }
 
 function editDisplayEvtHandler(e) {
@@ -452,13 +456,14 @@ function editDisplayEvtHandler(e) {
   let sBtn = thisDisp.querySelector('button.save');
   let cBtn = thisDisp.querySelector('button.cancel');
   let inps = thisDisp.querySelectorAll('input');
+  let famCount = dm.db.fileObj.fams.length;
   let inp, disp;
   for (disp of dm.d.disp) {
     if (disp.getAttribute('data-ref') !=idx) { disp.classList.add("dim"); }
   }
   for (inp of inps) { inp.removeAttribute('disabled'); }
   toggleEditable(thisDisp, "show");
-  toggleDraggables();
+  if (famCount >= 4 ) { toggleDraggables(); }
   dm.x.resetBtn.setAttribute('disabled', '');
   dm.x.expBtn.setAttribute('disabled', '');
   sBtn.addEventListener('click', editSaveEvtHandler);

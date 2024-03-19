@@ -122,7 +122,6 @@ function generateComps(dataObj, compsFolder, filePath) { // Generates the requir
                 var lineArray = allArray[g].split(" "); 
                 var finalLine = ""; // Output string builder
                 var tempStr = lineArray[0]; // Intermediate string holder starting with first element in array
-                alert(tempStr);
                 for (z=1; z<lineArray.length; z++) {
                   if (tempStr.length + lineArray[z].length > 25) {
                     finalLine += tempStr + "\n";

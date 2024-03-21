@@ -1,7 +1,7 @@
 function makeOverlays() {
   try {
     var debug = 1; // Turns error messages on or off. 0 == off, 1 == on
-    var myData = importList(); 
+    var myData = importList();
     if (!myData) {
       return false; // Terminates script. Any return from importList that isn't JSON data.
     }
@@ -34,17 +34,24 @@ function makeOverlays() {
             try { // test to see if it's valid json
               var myData = JSON.parse(myLine);
               myFile.close();
-              fileValid = true; // probably don't need this line
-              break;
+              if (myData.hasOwnProperty('origin')) {
+                if (myData.type == "Overlay") {
+                  fileValid = true; // necessary to return correct value and to break loop
+                }
+              } else {
+                failMsg = "The file contains JSON data, but is not for Ovelays.";
+              }
             } catch (err) { // If not valid json data
               myFile.close();
               failMsg = "Data in the file is not valid JSON data."
             }
           }
-          var reply = confirm(failMsg + " Try again?", false, "JSON file required"); // Offer otion to load a different file
-          if (!reply) { // If user clicks "no" esit loop, terminate script. If clicks yes, start loop again
-            alert("No valid file selected. Exiting script.");
-            break;
+          if (!fileValid) {
+            var reply = confirm(failMsg + " Try again?", false, "JSON file required"); // Offer otion to load a different file
+            if (!reply) { // If user clicks "no" esit loop, terminate script. If clicks yes, start loop again
+              alert("No valid file selected. Exiting script.");
+              break;
+            }
           }
         }
         if (fileValid) {
@@ -64,7 +71,7 @@ function makeOverlays() {
           var reply = confirm("Save to previously used folder?\n" + overlayGlobals.overlaySavePath.toString(), false, "Save Folder");
           if (reply) { // if user clicks yes, return true - script will use object property for path
             return true; // overlayGlobals.overlaySavePath;
-          } 
+          }
         }
         var validURI = false;
         while (!validURI) {
@@ -146,90 +153,90 @@ function makeOverlays() {
 
     function generateComps(dataObj, compsFolder, filePath) { // Generates the required new comps and places them in the new comps folder.
       try {
-      o = dataObj;
-      for (var c = 0; c < o.entries.length; c++) { // For each list entry, reads params and constructs source comp ID.
-        var e = o.entries[c];
-        try { var compID = buildTargetCompName(e); } catch (err) {alertErrors("buildTargetCompName", err, true); }
+        o = dataObj;
+        for (var c = 0; c < o.entries.length; c++) { // For each list entry, reads params and constructs source comp ID.
+          var e = o.entries[c];
+          try { var compID = buildTargetCompName(e); } catch (err) { alertErrors("buildTargetCompName", err, true); }
 
-        try { var outputName = buildNewCompName(e); } catch (err) {alertErrors("buildNewCompName", err, true); }
-        var myComp;
-        for (var i = 1; i <= app.project.numItems; i++) { // Finds correct source comp to clone, matched by name.
-          if ((app.project.item(i) instanceof CompItem) && (app.project.item(i).name === compID)) { // Duplicates and returns the and renames it.
-            myComp = app.project.item(i);
-            newComp = myComp.duplicate();
-            newComp.name = outputName;
-            var numLays = newComp.numLayers;
-            var outText = "";
-            for (y = 1; y <= numLays; y++) { // Finds text layers and sets source text to actual values
-              var myLayer = newComp.layer(y);
-              var lName = myLayer.name;
-              if (myLayer instanceof TextLayer) {// if short or medium message
-                if (myComp.name.indexOf("Short") != -1 || myComp.name.indexOf("Medium") != -1) {
-                  var txArray = e.txt.split(" ");
-                  var finalText = ""; // Output string builder
-                  var temp = txArray[0]; // Intermediate string holder starting with first element in array
-                  for (i = 1; i < txArray.length; i++) { //Loop through array of separate words
-                    if (temp.length + txArray[i].length > 13) { // if two words (temp and i) are greater than 10 characters in length total
-                      finalText += temp + "\n"; // push the contents of temp into final with a line break
-                      temp = txArray[i]; // put this word in temp
-                    } else { // If these two words are less than 10 char, push a space and i into temp
-                      temp += " " + txArray[i];
-                    }
-                    if (i == txArray.length - 1) { // Add last word to output string
-                      finalText += temp;
-                      temp = "";
-                    }
-                  } // "for" level 3.0
-                  myLayer.sourceText.setValue(finalText);
-                } else if (myComp.name.indexOf("Long") != -1) {
-                  var allArray = e.txt.split("#");
-                  var lineStr = "";
-                  for (g = 0; g < allArray.length; g++) {
-                    var lineArray = allArray[g].split(" ");
-                    var finalLine = ""; // Output string builder
-                    var tempStr = lineArray[0]; // Intermediate string holder starting with first element in array
-                    for (z = 1; z < lineArray.length; z++) {
-                      if (tempStr.length + lineArray[z].length > 25) {
-                        finalLine += tempStr + "\n";
-                        tempStr = lineArray[z];
-                      } else {
-                        tempStr += " " + lineArray[z];
+          try { var outputName = buildNewCompName(e); } catch (err) { alertErrors("buildNewCompName", err, true); }
+          var myComp;
+          for (var i = 1; i <= app.project.numItems; i++) { // Finds correct source comp to clone, matched by name.
+            if ((app.project.item(i) instanceof CompItem) && (app.project.item(i).name === compID)) { // Duplicates and returns the and renames it.
+              myComp = app.project.item(i);
+              newComp = myComp.duplicate();
+              newComp.name = outputName;
+              var numLays = newComp.numLayers;
+              var outText = "";
+              for (y = 1; y <= numLays; y++) { // Finds text layers and sets source text to actual values
+                var myLayer = newComp.layer(y);
+                var lName = myLayer.name;
+                if (myLayer instanceof TextLayer) {// if short or medium message
+                  if (myComp.name.indexOf("Short") != -1 || myComp.name.indexOf("Medium") != -1) {
+                    var txArray = e.txt.split(" ");
+                    var finalText = ""; // Output string builder
+                    var temp = txArray[0]; // Intermediate string holder starting with first element in array
+                    for (i = 1; i < txArray.length; i++) { //Loop through array of separate words
+                      if (temp.length + txArray[i].length > 13) { // if two words (temp and i) are greater than 10 characters in length total
+                        finalText += temp + "\n"; // push the contents of temp into final with a line break
+                        temp = txArray[i]; // put this word in temp
+                      } else { // If these two words are less than 10 char, push a space and i into temp
+                        temp += " " + txArray[i];
                       }
-                      if (z == lineArray.length - 1) {
-                        finalLine += tempStr;
-                        tempStr = "";
+                      if (i == txArray.length - 1) { // Add last word to output string
+                        finalText += temp;
+                        temp = "";
                       }
-                    } // "for" level 4.1.0
-                    lineStr += finalLine;
-                    if (g < allArray.length - 1) {
-                      lineStr += "\n\n";
+                    } // "for" level 3.0
+                    myLayer.sourceText.setValue(finalText);
+                  } else if (myComp.name.indexOf("Long") != -1) {
+                    var allArray = e.txt.split("#");
+                    var lineStr = "";
+                    for (g = 0; g < allArray.length; g++) {
+                      var lineArray = allArray[g].split(" ");
+                      var finalLine = ""; // Output string builder
+                      var tempStr = lineArray[0]; // Intermediate string holder starting with first element in array
+                      for (z = 1; z < lineArray.length; z++) {
+                        if (tempStr.length + lineArray[z].length > 25) {
+                          finalLine += tempStr + "\n";
+                          tempStr = lineArray[z];
+                        } else {
+                          tempStr += " " + lineArray[z];
+                        }
+                        if (z == lineArray.length - 1) {
+                          finalLine += tempStr;
+                          tempStr = "";
+                        }
+                      } // "for" level 4.1.0
+                      lineStr += finalLine;
+                      if (g < allArray.length - 1) {
+                        lineStr += "\n\n";
+                      }
+                    } // "for" level 3.1
+                    myLayer.sourceText.setValue(lineStr);
+                  } else if (myComp.name.indexOf("Stat-Text") != -1) {
+                    var statArray = e.txt.split("#");
+                    if (lName.indexOf("78") != -1) {
+                      myLayer.sourceText.setValue(e.txt.split("#")[0]);
+                    } else {
+                      myLayer.sourceText.setValue(e.txt.split("#")[1]);
                     }
-                  } // "for" level 3.1
-                  myLayer.sourceText.setValue(lineStr);
-                } else if (myComp.name.indexOf("Stat-Text") != -1) {
-                  var statArray = e.txt.split("#");
-                  if (lName.indexOf("78") != -1) {
-                    myLayer.sourceText.setValue(e.txt.split("#")[0]);
-                  } else {
-                    myLayer.sourceText.setValue(e.txt.split("#")[1]);
+                  } else if (!myComp.name.indexOf("Image") != -1) {
+                    myLayer.sourceText.setValue(e.txt);
                   }
-                } else if (!myComp.name.indexOf("Image") != -1) {
-                  myLayer.sourceText.setValue(e.txt);
                 }
+              } // "for" level 2
+              if (newComp.parentFolder !== compsFolder) { // moves the comp into the new comps folder.
+                newComp.parentFolder = compsFolder;
               }
-            } // "for" level 2
-            if (newComp.parentFolder !== compsFolder) { // moves the comp into the new comps folder.
-              newComp.parentFolder = compsFolder;
+              var renderItem = app.project.renderQueue.items.add(newComp); // Adds items to render queue
+              try { renderItem.outputModule(1).applyTemplate("Overlays Output"); } catch (err) { alertErrors("Setting output module template", err, true); }
+              var myFile = new File(filePath.toString() + "/" + outputName);
+              renderItem.outputModule(1).file = myFile
+              break;
             }
-            var renderItem = app.project.renderQueue.items.add(newComp); // Adds items to render queue
-            try { renderItem.outputModule(1).applyTemplate("Overlays Output"); } catch (err) { alertErrors("Setting output module template", err, true);}
-            var myFile = new File(filePath.toString() + "/" + outputName);
-            renderItem.outputModule(1).file = myFile
-            break;
-          }
-        } // "for" level 1
-      } // "for" level 0
-    } catch (err) {alertErrors("generateComps", err, true);}
+          } // "for" level 1
+        } // "for" level 0
+      } catch (err) { alertErrors("generateComps", err, true); }
     }
 
     function buildOverlays() { // Function that finally creates all the overlays

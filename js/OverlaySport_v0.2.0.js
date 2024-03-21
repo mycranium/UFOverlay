@@ -55,6 +55,8 @@ function formatStyleId(style) {
 
 function makeObj() {
   let myObj = {};
+  myObj.origin = "Overlay Maker";
+  myObj.type = "Overlay";
   myObj.projNum = "";
   myObj.jobNum = "";
   myObj.jobName = "";
@@ -385,7 +387,7 @@ function download(filename, text) {
 document.getElementById("jsonmaker").addEventListener("click", function(){
   if (!objAddGlobals()) {return;}
     var text = JSON.stringify(eObj);
-    var filename = eObj.jobNum +"_" + eObj.jobName + "_Overlays_List_" + formatDate() + ".txt";
+    var filename = "Overlays_Data_" + eObj.jobNum + "_" + eObj.jobName + "_" +  formatDate() + ".json";
     download(filename, text);
     clearEverything();
 }, false);

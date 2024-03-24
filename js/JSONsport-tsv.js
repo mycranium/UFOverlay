@@ -1,7 +1,8 @@
 let defaults = {
   "style": "Standard",
+  "styleId": "Standard",
   "color": "Blue",
-  "colorNum": 1,
+  "colorId": 1,
   "side": "Right",
   "version": 1
 };
@@ -28,13 +29,14 @@ function makeObj() {
   let myObj = {};
   myObj.origin = "L3 Maker";
   myObj.type = "L3";
-  myObj.jobNum = "";
+  myObj.projNum = "";
   myObj.designer = "";
   myObj.style = defaults.style;
-  myObj.color = defaults.color;
-  myObj.colorNum = defaults.colorNum;
+  myObj.styleId = defaults.styleId;
   myObj.side = defaults.side;
   myObj.version = defaults.version;
+  myObj.color = defaults.color;
+  myObj.colorId = defaults.colorId;
   myObj.entries = new Array();
   return myObj;
 }
@@ -50,7 +52,7 @@ function processText(textArray) {
     let r = textArray[c];
     entry.style = eObj.style;
     entry.color = eObj.color;
-    entry.colorNum = eObj.colorNum;
+    entry.colorId = eObj.colorId;
     entry.side = eObj.side;
     entry.version = eObj.version.toString();
     entry.personName = r[0];
@@ -186,7 +188,7 @@ function updateFields(range) {
 
 function clearEverything() {
   let table = document.getElementById("entriesTable");
-  let job = document.getElementById("jobNum");
+  let proj = document.getElementById("projNum");
   let textArea = document.getElementById("textVal");
   let ver = document.getElementById("versionNumber");
   let txtDiv = document.getElementById("editWrapper");
@@ -196,7 +198,7 @@ function clearEverything() {
   }
   allSelectToggle("none");
   table.remove();
-  job.value = "";
+  proj.value = "";
   textArea.value = "";
   ver.value = "1";
   eObj = makeObj();
@@ -206,11 +208,11 @@ function clearEverything() {
 }
 
 function objAddGlobals() {
-  let job = document.getElementById("jobNum");
+  let proj = document.getElementById("projNum");
   let dsgnr = document.getElementById("designer");
   let valMsg = "";
-  if (!job.validity.valid) {
-    valMsg += "Job Number is required, and must be a 5-digit number\n";
+  if (!proj.validity.valid) {
+    valMsg += "Project Number is required, and must be a 5-digit number\n";
   }
   if (!dsgnr.validity.valid) {
     valMsg += "Designer is required\n";
@@ -224,7 +226,7 @@ function objAddGlobals() {
   for (let t = 0; t < nms.length; t++) {
     inits += nms[t][0];
   }
-  eObj.jobNum = job.value;
+  eObj.projNum = proj.value;
   eObj.designer = inits;
   return true;
 }
@@ -286,11 +288,12 @@ function applyBtnHandler(e) {
     idx = selectedElems[i];
     if (globalsArray[0][0] != "none") {
       eObj.entries[idx].style = globalsArray[0][1];
+      eObj.entries[idx].styleId = globalsArray[0][0];
     }
 
     if (globalsArray[1][0] != "none") {
       eObj.entries[idx].color = globalsArray[1][1];
-      eObj.entries[idx].colorNum = globalsArray[1][0];
+      eObj.entries[idx].colorId = globalsArray[1][0];
     }
 
     if (globalsArray[2][0] != "none") {
@@ -372,7 +375,7 @@ document.getElementById("jsonmaker").addEventListener("click", function () {
     return;
   }
   var text = JSON.stringify(eObj);
-  var filename = "Lower_Thirds_Data_" + eObj.jobNum + "_" + formatDate() + ".json";
+  var filename = "Lower_Thirds_Data_" + eObj.projNum + "_" + formatDate() + ".json";
   download(filename, text);
   clearEverything();
 }, false);

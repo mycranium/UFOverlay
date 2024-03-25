@@ -1,6 +1,6 @@
 function makeOverlays() {
   try {
-    var debug = 0; // Turns error messages on or off. 0 == off, 1 == on
+    var debug = 1; // Turns error messages on or off. 0 == off, 1 == on
     var myData = importList();
     if (!myData) {
       return false; // Terminates script. Any return from importList that isn't JSON data.
@@ -21,12 +21,12 @@ function makeOverlays() {
         var myLine;
         var myData;
         while (!fileValid) { // loop condition, loop runs until file is valid then breaks
-          var myFile = File.openDialog("Select a JSON file.", "JSON:*.json");
+          var myFile = File.openDialog("Select a JSON file.");//, "JSON:*.json");
           if (myFile === null) { // If user clicks Cancel button instead of selecting file
             alert("Operation canceled. Exiting script.");
             return false;
           }
-          if (myFile.displayName.indexOf(".json") == -1) { // See if it has the json extension
+          if (myFile.name.indexOf(".json") == -1) { // See if it has the json extension
             failMsg = "The file selected must have the \".json\" extension.";
           } else {
             myFile.open("r"); // If it passes extenstion check, open the file
@@ -133,7 +133,7 @@ function makeOverlays() {
       }
       return compsFolder;
     }
-//!/!/ This will work after adding styleId to L3 data
+
     function buildTargetCompName(entry) { // Constructs the name of the comp to duplicate for the overlay being created
       var style = entry.styleId + "-";
       var side = entry.side;
@@ -144,11 +144,11 @@ function makeOverlays() {
 
     function buildNewCompName(e) { // Constructs the name for the new comp
       o = myData;
-      if (debug != 0) {alert(e.personName);}
+      // if (debug != 0) {alert(e.personName);}
       var sep = "-"
       var prefix = "";
       if (o.hasOwnProperty("prefix")) { prefix = "FRS_FY25_"; }
-      var version = (e.version < 10) ? "v0" + e.version.toString() : "v" + e.version.toString();
+      var version = (parseInt(e.version) < 10) ? "v0" + e.version.toString() : "v" + e.version.toString();
       var outDate = formatDate(false);
       var outputName = ""
       if (o.type == "Overlay") {
@@ -170,7 +170,7 @@ function generateComps(compsFolder, filePath) { // Generates the required new co
       for (var i = 1; i <= app.project.numItems; i++) { // Finds correct source comp to clone, matched by name.
         if ((app.project.item(i) instanceof CompItem) && (app.project.item(i).name === compID)) { // Duplicates and returns the and renames it.
           myComp = app.project.item(i);
-          newComp = myComp.duplicate();
+          try {newComp = myComp.duplicate();} catch (err)  {alert("Didn't work, newComp - " + err.message + " at " + err.line);}
           newComp.name = outputName;
           if (myData.type == "L3") {
             var myItem = newComp.layer("Bar");

@@ -2,9 +2,9 @@ let defaults = {
   "style": "Standard",
   "styleId": "Standard",
   "color": "Blue",
-  "colorId": 1,
+  "colorId": "1",
   "side": "Right",
-  "version": 1
+  "version": "1"
 };
 var eObj = makeObj();
 let processBtn = document.getElementById('process');
@@ -51,6 +51,7 @@ function processText(textArray) {
     let entry = {};
     let r = textArray[c];
     entry.style = eObj.style;
+    entry.styleId = eObj.styleId;
     entry.color = eObj.color;
     entry.colorId = eObj.colorId;
     entry.side = eObj.side;

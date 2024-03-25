@@ -31,6 +31,7 @@ div.instructionsContainer { box-sizing: border-box; width: 100%; padding: 0 3rem
 .regularRow { box-sizing: content-box; margin: .5rem 0 0; padding: 1rem 1rem .5rem 1rem; }
 .regularRow p {padding: 0 2rem; line-height: 1.3em; margin: 0;}
 .instructionsRow {padding: 0; border: 1px dotted #555;}
+.instructionsRow ul {width: 90%;}
 
 #textVal {  box-sizing: border-box; display: block; padding: .5rem; width: 100%; }
 #entriesContainer {padding: 0; border-radius: 2rem; }
@@ -96,9 +97,4 @@ tr:hover td {
 caption {
   padding: 10px;
 }
-
-/*div.row {display: flex; justify-content: flex-start;}
-
-
-background: radial-gradient(circle at center, #FFF 62%, #0F0 62%);*/
 

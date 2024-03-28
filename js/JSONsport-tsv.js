@@ -18,7 +18,6 @@ function getText() {
   let outArray = new Array();
   for (let i = 0; i < gotArray.length; i++) {
     let r = gotArray[i]; // replace first \t with space, then split on \t
-    //    r = r.replace(/\(([^\)]+)\)/, '');
     r = r.replace(/\t/, ' ');
     outArray.push(r.split("\t"));
   }
@@ -40,11 +39,6 @@ function makeObj() {
   myObj.entries = new Array();
   return myObj;
 }
-
-//function checkQuotes() {
-//  let noQuote = "The entry for name uses Mini Quote style, but there is no quote.";
-//  return noQuote;
-//}
 
 function processText(textArray) {
   for (let c = 0; c < textArray.length; c++) {

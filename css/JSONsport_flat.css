@@ -17,6 +17,8 @@ li { margin-bottom: .3em; letter-spacing: 0; }
 .container { box-sizing: border-box; width: 100%; padding: 0 3rem 1rem 3rem; background-color: #fff; margin-top:0rem; }
 div.instructionsContainer { box-sizing: border-box; width: 100%; padding: 0 3rem 0 3rem; background-color: #fff; margin: 1rem 0; }
 .column { padding:.5rem 0; margin-left: 1rem; }
+.column.version { text-align: center; }
+.column.version p { font-size: .8rem; margin:0; padding:0; }
 .row { display: flex; padding: .2rem 0; }
 .button { padding: 1rem; margin: .5rem 1rem .5rem 0; border-radius: .4rem; }
 .smallBtn {border: 1px inset #000; border-radius: .3em; padding: 3px 12px; }

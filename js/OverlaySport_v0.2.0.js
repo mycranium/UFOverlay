@@ -2,9 +2,6 @@ var eObj = makeObj();
 let processBtn = document.getElementById('process');
 let resetBtn = document.getElementById('resetFields');
 let clearBtn = document.getElementById('clearAll');
-let selAllBtn = document.getElementById("allBtn");
-let selNoneBtn = document.getElementById("noneBtn");
-let selInvertBtn = document.getElementById("invertBtn");
 
 function getText() {
   let elem = document.getElementById("textVal");
@@ -70,7 +67,6 @@ function makeObj() {
 }
 
 function processText(textArray) {
-  let arr = getSelects();
   for (c=0; c<textArray.length; c++) {
     let  entry = {};
     let r = textArray[c];

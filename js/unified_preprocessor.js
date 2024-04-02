@@ -3,8 +3,12 @@ var eObj = {};
 let processBtn = document.getElementById('process');
 let resetBtn = document.getElementById('resetFields');
 let clearBtn = document.getElementById('clearAll');
+let cancelBtn = document.getElementById('cancelEntry');
 let L3Btn = document.getElementById("L3_action");
 let ovlBtn = document.getElementById("overlay_action");
+let exportBtn = document.getElementById("jsonmaker");
+// 
+// targDiv = outer
 
 function ovlBtnHandler(e) {
   let ovlType = e.target.id.split("_")[0];
@@ -13,6 +17,10 @@ function ovlBtnHandler(e) {
   let edit_inst;
   let style_opts;
   let jobs;
+  let dHeight;
+  let wrap;
+  let sec;
+  let actWrap;
   let ctrls = document.querySelector('#globalControls .row');
   if (ovlType == "L3") {
     input_inst = document.getElementById("L3_input_instructions").content.cloneNode('true');
@@ -29,7 +37,7 @@ function ovlBtnHandler(e) {
     edit_inst = document.getElementById("overlay_edit_instructions").content.cloneNode('true');
     style_opts = document.getElementById("style_overlay_options").content.cloneNode('true');
     jobs = document.getElementById("job_overlay_input").content.cloneNode('true');
-    ctrls.appendChild(jobs);    
+    ctrls.appendChild(jobs);
   }
   let input_ul = document.getElementById("input_instructions");
   let edit_ul = document.getElementById("edit_instructions");
@@ -46,66 +54,15 @@ function ovlBtnHandler(e) {
   input_ul.appendChild(input_inst);
   edit_ul.appendChild(edit_inst);
   styleSel.appendChild(style_opts);
-}
 
-function getText() {
-  let elem = document.getElementById("textVal");
-  let gotText = elem.value;
-  let gotArray = gotText.split("\n");
-  let outArray = new Array();
-  let split = (eObj.type == "L3") ? "\t" : "|";
-  for (let i = 0; i < gotArray.length; i++) {
-    let r = gotArray[i]; // replace first \t with space, then split on \t
-    if (eObj.type == "L3") {
-      const rplArr = [/ \t/g, /\t /g, /\t\t/g, /  /g];
-      let rplLen = rplArr.length;
-      let t;
-      let p;
-      for (t=0; t<rplLen; t++) {
-        p = (t < 3) ? "\t" : "  ";
-        r = r.replace(rplArr[t], p);
-      }
-      r = r.replace(/\t/, ' ');
-    }
-    if (r != "") { outArray.push(r.split(split)); }
-  }
-  return outArray;
-}
-
-function toTitleCase(style) { // Used only by graphic overlays
-  let str = style.toLowerCase();
-  let spl = str.split(" ");
-  let nStr = "";
-  for (i = 0; i < spl.length; i++) {
-    nStr += spl[i][0].toUpperCase() + spl[i].substring(1);
-    if (i < spl.length - 1) { nStr += " "; }
-  }
-  return nStr;
-}
-
-function formatStyleId(style) { // Used only by graphic overlays
-  style = style.toUpperCase();
-  let styleId = "";
-  switch (style) {
-    case "SHORT MESSAGE":
-      return "Short";
-      break;
-    case "MEDIUM MESSAGE":
-      return "Medium";
-      break;
-    case "LONG MESSAGE":
-      return "Long";
-      break;
-    case "STAT":
-      return "Stat";
-      break;
-    case "STAT WITH TEXT":
-      return "Stat-Text";
-      break;
-    case "IMAGE":
-      return "Image";
-      break;
-  }
+  sec = document.getElementById('editWrapper');
+  dHeight = sec.querySelector('.content').offsetHeight;
+  wrap = sec.querySelector('.inner');
+  actWrap = document.getElementById("initialActionsInner");
+  actWrap.setAttribute('style', 'height: 0');
+  sleep(700).then(() => {
+    wrap.setAttribute('style', 'height: ' + dHeight + "px");
+  });
 }
 
 function makeObj(ovlType) {
@@ -127,6 +84,32 @@ function makeObj(ovlType) {
   return myObj;
 }
 
+function getText() {
+  let elem = document.getElementById("textVal");
+  let gotText = elem.value;
+  let gotArray = gotText.split("\n");
+  let outArray = new Array();
+  let split = (eObj.type == "L3") ? "\t" : "|";
+  for (let i = 0; i < gotArray.length; i++) {
+    let r = gotArray[i]; // replace first \t with space, then split on \t
+    if (eObj.type == "L3") {
+      const rplArr = [/ \t/g, /\t /g, /\t\t/g, / {2}/g];
+      let rplLen = rplArr.length;
+      let t;
+      let p;
+      for (t = 0; t < rplLen; t++) {
+        p = (t < 3) ? "\t" : "  ";
+        r = r.replace(rplArr[t], p);
+      }
+      r = r.replace(/\t/, ' ');
+    }
+    if (r != "") {
+      outArray.push(r.split(split));
+    }
+  }
+  return outArray;
+}
+
 function processText(textArray) {
   for (let c = 0; c < textArray.length; c++) {
     let entry = {};
@@ -144,8 +127,12 @@ function processText(textArray) {
       entry.style = styleFmt;
       entry.styleId = formatStyleId(styleFmt);
       let iSide = r[2];
-      if (iSide.toLowerCase() == "right") { iSide = "Right"; }
-      if (iSide.toLowerCase() == "left") { iSide = "Left"; }
+      if (iSide.toLowerCase() == "right") {
+        iSide = "Right";
+      }
+      if (iSide.toLowerCase() == "left") {
+        iSide = "Left";
+      }
       entry.side = iSide;
       entry.txt = r[3];
     }
@@ -154,6 +141,46 @@ function processText(textArray) {
     entry.version = eObj.version.toString();
     eObj.entries.push(entry);
   }
+}
+
+function toTitleCase(style) { // Used only by graphic overlays
+  let str = style.toLowerCase();
+  let spl = str.split(" ");
+  let nStr = "";
+  let i;
+  for (i = 0; i < spl.length; i++) {
+    nStr += spl[i][0].toUpperCase() + spl[i].substring(1);
+    if (i < spl.length - 1) {
+      nStr += " ";
+    }
+  }
+  return nStr;
+}
+
+function formatStyleId(style) { // Used only by graphic overlays
+  style = style.toUpperCase();
+  let styleId = "";
+  switch (style) {
+    case "SHORT MESSAGE":
+      styleId = "Short";
+      break;
+    case "MEDIUM MESSAGE":
+      styleId = "Medium";
+      break;
+    case "LONG MESSAGE":
+      styleId = "Long";
+      break;
+    case "STAT":
+      styleId = "Stat";
+      break;
+    case "STAT WITH TEXT":
+      styleId = "Stat-Text";
+      break;
+    case "IMAGE":
+      styleId = "Image";
+      break;
+  }
+  return styleId;
 }
 
 function makeTable() {
@@ -310,31 +337,38 @@ function updateFields(range) {
   }
 }
 
-function clearEverything() {
-  let table = document.getElementById("entriesTable");
+function clearEverything(src) {
+  let targ = (src == "cancelEntry") ? "editInner" : "entriesInner";
+  let act = document.getElementById('initialActionsInner');
+  let dHeight = act.querySelector('.content').offsetHeight;
+  let targDiv = document.getElementById(targ);
   let proj = document.getElementById("projNum");
   let textArea = document.getElementById("textVal");
   let ver = document.getElementById("versionNumber");
-  let txtDiv = document.getElementById("editWrapper");
-  let options = document.querySelectorAll('select option');
-  if (eObj.type != "L3") {
-    let job = document.getElementById("jobNum");
-    let jName = document.getElementById("jobName");
-    job.value = "";
-    jName.value = "";
-  }
-  for (var i = 0, l = options.length; i < l; i++) {
-    options[i].selected = options[i].defaultSelected;
-  }
-  allSelectToggle("none");
-  table.remove();
-  proj.value = "";
-  textArea.value = "";
-  ver.value = "1";
-  eObj = makeObj();
-  txtDiv.removeAttribute("hidden");
-  let entries = document.getElementById("entriesWrapper")
-  entries.setAttribute("hidden", "");
+  let options;
+  let table;
+
+  targDiv.setAttribute('style', 'height: 0');
+  sleep(1000).then(() => {
+    act.setAttribute('style', 'height: ' + dHeight + 'px');
+    if (eObj.type != "L3") {
+      document.getElementById("jobNumDiv").remove();
+      document.getElementById("jobNameDiv").remove();
+    }
+    options = document.querySelectorAll('select option');
+    for (var i = 0, l = options.length; i < l; i++) {
+      options[i].selected = options[i].defaultSelected;
+    }
+    allSelectToggle("none");
+    if (src != "cancelEntry") {
+      table = document.getElementById("entriesTable");
+      table.remove();
+    }
+    proj.value = "";
+    textArea.value = "";
+    ver.value = "1";
+    eObj = makeObj();
+  });
 }
 
 function objAddGlobals() {
@@ -345,20 +379,25 @@ function objAddGlobals() {
   let inits = "";
   let job;
   let jbName;
-  for (let t = 0; t < nms.length; t++) { inits += nms[t][0]; }
+  for (let t = 0; t < nms.length; t++) {
+    inits += nms[t][0];
+  }
   if (!proj.validity.valid) {
     valMsg += "Project Number is required, and must be a 5-digit number\n";
   }
   if (!dsgnr.validity.valid) {
     valMsg += "Designer is required\n";
   }
-if (eObj.type != "L3") {
-  job = document.getElementById("jobNum"); // eg "GS03"
-  console.log(job);
-  jbName = document.getElementById("jobName");
-  if (!job.validity.valid) { valMsg += "Job Number is required, and must be a 5-digit number\n"; }
-  if (!jbName.validity.valid) { valMsg += "Job Name is required\n"; }
-}
+  if (eObj.type != "L3") {
+    job = document.getElementById("jobNum"); // eg "GS03"
+    jbName = document.getElementById("jobName");
+    if (!job.validity.valid) {
+      valMsg += "Job Number is required, and must be a 5-digit number\n";
+    }
+    if (!jbName.validity.valid) {
+      valMsg += "Job Name is required\n";
+    }
+  }
   if (valMsg != "") {
     alert(valMsg);
     return false;
@@ -377,10 +416,14 @@ function allSelectToggle(action) { //all, none, invert
   cBoxes.forEach((cBox) => {
     switch (action) {
       case "all":
-        if (!cBox.checked) {cBox.checked = true;}
+        if (!cBox.checked) {
+          cBox.checked = true;
+        }
         break;
       case "none":
-        if (cBox.checked) {cBox.checked = false;}
+        if (cBox.checked) {
+          cBox.checked = false;
+        }
         break;
       case "invert":
         (cBox.checked) ? cBox.checked = false: cBox.checked = true;
@@ -389,27 +432,24 @@ function allSelectToggle(action) { //all, none, invert
   });
 }
 
-function toggleHidden() {
-  let txtDiv = document.getElementById("editWrapper");
-  let entries = document.getElementById("entriesWrapper");
-  (txtDiv.hidden) ? txtDiv.removeAttribute("hidden"): txtDiv.setAttribute("hidden", "");
-  (entries.hidden) ? entries.removeAttribute("hidden"): entries.setAttribute("hidden", "");
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function formatDate() { // Formats a new date for use in the new comp folder name. Returns a string.
-  myDate = new Date();
-  var sep = "-";
-  var rawYear = myDate.getFullYear() - 2000;
-  var fmtYear = rawYear.toString();
-  var rawMonth =  myDate.getMonth() + 1;
-  var fmtMonth = (rawMonth < 10) ? "0" + rawMonth.toString() : rawMonth.toString();
-  var rawDay = myDate.getDate();
-  var fmtDay = (rawDay < 10) ? "0" + rawDay.toString() : rawDay.toString();
-  var fmtDate = fmtMonth + sep + fmtDay + sep + fmtYear;
-  var rawHours = myDate.getHours();
-  var fmtHours = (rawHours < 10) ? "0" + rawHours.toString() : rawHours.toString();
-  var rawMinutes = myDate.getMinutes();
-  var fmtMinutes = (rawMinutes < 10) ? "0" + rawMinutes.toString() : rawMinutes.toString();
+  let myDate = new Date();
+  let sep = "-";
+  let rawYear = myDate.getFullYear() - 2000;
+  let fmtYear = rawYear.toString();
+  let rawMonth = myDate.getMonth() + 1;
+  let fmtMonth = (rawMonth < 10) ? "0" + rawMonth.toString() : rawMonth.toString();
+  let rawDay = myDate.getDate();
+  let fmtDay = (rawDay < 10) ? "0" + rawDay.toString() : rawDay.toString();
+  let fmtDate = fmtMonth + sep + fmtDay + sep + fmtYear;
+  let rawHours = myDate.getHours();
+  let fmtHours = (rawHours < 10) ? "0" + rawHours.toString() : rawHours.toString();
+  let rawMinutes = myDate.getMinutes();
+  let fmtMinutes = (rawMinutes < 10) ? "0" + rawMinutes.toString() : rawMinutes.toString();
   fmtDate += "_" + fmtHours + sep + fmtMinutes;
   return fmtDate;
 }
@@ -453,23 +493,31 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-document.getElementById("jsonmaker").addEventListener("click", function () {
-  if (!objAddGlobals()) { return; }
+exportBtn.addEventListener("click", function (e) {
+  if (!objAddGlobals()) {
+    return;
+  }
   let text = JSON.stringify(eObj);
   let filename;
-  if (eObj.type == "L3") {  
+  if (eObj.type == "L3") {
     filename = "Lower_Thirds_Data_" + formatDate() + "_" + eObj.projNum + ".json";
   } else {
     filename = "Overlays_Data_" + formatDate() + "_" + eObj.jobNum + "_" + eObj.jobName + ".json";
   }
   download(filename, text);
-  clearEverything();
+  clearEverything(e.target.id);
 }, false);
 
 processBtn.addEventListener('click', function () {
   let txtWin = document.getElementById("textVal");
   let valMsg = "";
-  if (!txtWin.validity.valid) { valMsg += "Text Area is required\n"; }
+  let sec;
+  let dHeight;
+  let inWrap;
+  let outWrap;
+  if (!txtWin.validity.valid) {
+    valMsg += "Text Area is required\n";
+  }
   if (valMsg != "") {
     alert(valMsg);
     return;
@@ -482,24 +530,47 @@ processBtn.addEventListener('click', function () {
   let matches = document.querySelectorAll("td[contenteditable]");
   matches.forEach((txField) => {
     (function () {
-      txField.addEventListener("blur", function () { updateObject(txField); }, false);
+      txField.addEventListener("blur", function () {
+        updateObject(txField);
+      }, false);
     }());
   });
   let selAllP = document.getElementById("allP");
   let selNoneP = document.getElementById("noneP");
   let selInvertP = document.getElementById("invertP");
-  selAllP.addEventListener('click', function () { allSelectToggle("all"); });
-  selNoneP.addEventListener('click', function () { allSelectToggle("none"); });
-  selInvertP.addEventListener('click', function () { allSelectToggle("invert"); });
-  toggleHidden();
+  selAllP.addEventListener('click', function () {
+    allSelectToggle("all");
+  });
+  selNoneP.addEventListener('click', function () {
+    allSelectToggle("none");
+  });
+  selInvertP.addEventListener('click', function () {
+    allSelectToggle("invert");
+  });
+
+  sec = document.getElementById('entriesWrapper');
+  dHeight = sec.querySelector('.content').offsetHeight;
+  inWrap = sec.querySelector('.inner');
+  outWrap = document.getElementById("editInner");
+  outWrap.setAttribute('style', 'height: 0');
+  sleep(1000).then(() => {
+    inWrap.setAttribute('style', 'height: ' + dHeight + "px");
+  });
   txtWin.value = "";
 });
 
-resetBtn.addEventListener('click', function() {
+resetBtn.addEventListener('click', function () {
   document.getElementById("textVal").value = "";
 });
 
-clearBtn.addEventListener("click", function () { clearEverything(); });
+clearBtn.addEventListener("click", function (e) {
+  clearEverything(e.target.id);
+});
+
+cancelBtn.addEventListener("click", function (e) {
+  clearEverything(e.target.id);
+});
+
 ovlBtn.addEventListener('click', ovlBtnHandler);
 L3Btn.addEventListener('click', ovlBtnHandler);
 

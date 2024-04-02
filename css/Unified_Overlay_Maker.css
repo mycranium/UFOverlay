@@ -1,13 +1,14 @@
 /* { box-sizing: border-box; }*/
 html {min-height: 100%; }
-body {margin:0; padding:0; font-size: 90%; font-family: arial, sans-serif; background: radial-gradient(circle at center 200px, #444 40%, #000 100%); }
-main, header { box-sizing: border-box; }
-main {width: 64rem; background-color:#fff; border-radius: 1.4rem; padding: 0; margin: 1rem auto; }
-header {width: 100%; background-color:#d60; color:white; padding:1rem 2rem; margin-bottom:1.5rem; margin-top:1.5rem; }
+body {margin:0; padding:0; font-size: 90%; font-family: arial, sans-serif; background: radial-gradient(circle at center 200px, #444 40%, #000 100%); position: relative; }
+main, header { box-sizing: border-box; position: relative;  overflow: hidden; }
+main {width: 64rem; min-width: 64rem; background-color:#fff; background-color: magenta; padding: 0; margin: 1rem auto 0; z-index: 5; }
+header {width: 100%; background-color:#369edd; color:white; padding:1rem 2rem; margin-bottom:1.5rem; margin-top:1.5rem; position: relative; z-index: 10;}
 header h1, header h2 {width: 64rem; text-align: left; margin: .1rem auto; }
 header h1 { font-size: 3em; }
 header h2 { font-size: 1.8em; }
-h3 {margin: 0 0 .25rem 0; padding: .6rem 3rem; font-size: 1.6em; text-align: center; background-color: #669; color: white; text-transform: uppercase; border-top-left-radius: 1.4rem; border-top-right-radius: 1.4rem; }
+section {background-color: #FFF; overflow: hidden; }
+h3 {margin: 0; padding: .6rem 3rem; font-size: 1.6em; text-align: left; background-color: #2B7FB3; color: white; text-transform: uppercase; }
 h4 {font-size: 1.2em; margin:0 0 1rem 0; padding: .5rem 2rem; background-color: #ddd; color:#000; text-align: left;}
 legend { font-size: 1.2em; font-weight: bold; background-color: #669; color: white; border-radius: .2em; padding: 0 .4em .1em; }
 label { font-weight: bold; display: inline-block; }
@@ -16,9 +17,11 @@ li ul {line-height: 1.2em; }
 li ul li {margin-bottom: .2rem; }
 li {margin-bottom: .75em; }
 pre {background-color: #eee; border: 1px solid #333; padding: .3rem; font-size: 1rem; }
-.heading {padding: 0; margin:0; }
-.container { box-sizing: border-box; width: 100%; padding: 0 3rem 1rem 3rem; background-color: #fff; margin-top:0rem; }
-div.instructionsContainer { box-sizing: border-box; width: 100%; padding: 0 3rem 0 3rem; background-color: #fff; margin: 1rem 0; }
+footer { width: 64rem; background-color:#369edd; padding: .25rem 0; margin: 0 auto; }
+footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem 0; margin: 0 auto; }
+.heading { padding: 0; margin:0; position: relative; z-index: 10; border-bottom: 2px solid #FFF; }
+.container { box-sizing: border-box; width: 100%; padding: 0 3rem 1rem 3rem; margin: 0; }
+div.instructionsContainer { box-sizing: border-box; width: 100%; padding: 1.1rem 3rem 1.1rem 3rem; background-color: #fff; margin: 0; }
 .column:first-child {margin: 0 0 0 .65rem; }
 .column {padding:.5rem 0; margin: 0; display: flex; justify-content: flex-start; align-content: flex-start; align-items: flex-start; gap: .4rem;}
 .column.apply { width: 15rem; margin: 0; }
@@ -26,14 +29,19 @@ div.instructionsContainer { box-sizing: border-box; width: 100%; padding: 0 3rem
 .column.version div { padding: 0; margin: 0; display: flex; justify-content: flex-start; align-content: center; align-items: center; gap: .4rem; }
 .column.version p { font-size: .8rem; margin:0; padding:0; }
 .row {display: flex; justify-content: flex-start; padding: .2rem 1.5rem; gap: 1rem; }
-.button { padding: 1rem; margin: .5rem 1rem .5rem 0; border-radius: .4rem; }
+.row.split {display: flex; justify-content: space-between; padding: .5rem 0; }
+.button { font-size: 1rem; width: 10rem; padding: 1rem; margin: .5rem 1rem .5rem 0; border-radius: .4rem; }
+.button:last-child { margin-right: 0; }
 .smallBtn { font-weight: bold; border: 1px inset #000; border-radius: .3em; padding: 3px 6px; background-color: #acf; }
 .smallBtn span { font-size: 1.1rem; font-weight: bold; }
 .regularRow { box-sizing: content-box; margin: .5rem 0 0; padding: 1rem 1rem .5rem 1rem; }
 .regularRow p {padding: 0 2rem; line-height: 1.3em; margin: 0;}
-.instructionsRow {padding: 0; border: 1px dotted #555;}
+.instructionsRow {padding: 0 0 .5rem 0;  border: 1px dotted #555;}
 .instructionsRow ul {width: 90%;}
-
+.action { padding: .6rem; width: 10rem; font-size: 1.1rem; border: none; border-radius: 0; }
+.content {width: 100%;}
+#initialActionsContainer { padding-top: 1rem; display: flex; flex-flow: row nowrap; justify-content: center; align-content: center; align-items: center; gap: 1.5rem; position: relative; }
+#initialActionsContainer p {font-size: 1.3rem;}
 #textVal { box-sizing: border-box; display: block; padding: .5rem; width: 100%; }
 #entriesContainer {padding: 0; border-radius: 2rem; }
 #tableRow{padding: 0 3rem;}
@@ -48,14 +56,54 @@ div.instructionsContainer { box-sizing: border-box; width: 100%; padding: 0 3rem
 #versionNumber { width: 3em; }
 #jsonControls button { padding: 1rem; margin: .5rem 1rem .5rem 0; }
 #jsonControls { margin-left: 2rem; }
+#textEntry { background-color: #FFF; }
+
+/* All section content moves except h3 */
+#initialActionsWrapper { position: relative; z-index: 10; background-color: #FFF;}
+#initialActionsInner { position: relative; z-index: 8; height: 6.1rem; background-color: #FFF; transition: height .7s ease;}
+#initialActionsInner .content { position: absolute; bottom: 0; width: 100%; }
+
+#editWrapper { position: relative; z-index: 2; }
+#editInner { position: relative; z-index: 2; height: 0; transition: all .8s ease; }
+#editInner .content { position: absolute;  bottom: 0; z-index: 3;}
+
+#entriesWrapper {position: relative; }
+#entriesInner {position: relative; height: 0; transition: height 1s ease; }
+#entriesInner .content { position: absolute; bottom: 0; }
+
+
+/* All section content moves including h3 */
+/*#editWrapper { position: relative; z-index: 2; height: 0; transition: all .8s ease; }
+#editContent { position: absolute;  bottom: 0; z-index: 3;}
+
+#entriesWrapper {position: relative; height: 0; transition: height 1s ease; }
+#entrySec { position: absolute; bottom: 0; }
+
+#initialActionsWrapper { position: relative; z-index: 10; height: 9rem; background-color: #FFF; transition: height .7s ease;}
+#initialActionsOuter { position: absolute; bottom: 0; width: 100%; } */
+
+.orange {border: none; border-radius: .4rem; color: white; font-weight:bold; background-color: #F60; }
+.orange:hover { background-color: #F80; }
+.purple {border: none; border-radius: .4rem; color: white; font-weight:bold; background-color: #90F; }
+.purple:hover { background-color: #A3F; }
+.green {border: none; border-radius: .4rem; color: white; font-weight:bold; background-color: #1B1; }
+.green:hover { background-color: #1D1; }
+.blue {border: none; border-radius: .4rem; color: white; font-weight:bold; background-color: #39F; }
+.blue:hover { background-color: #6BF; }
+.red {border: none; border-radius: .4rem; color: white; font-weight:bold; background-color: #D11; }
+.red:hover { background-color: #F33; }
 
 .radialGreen {border: none; border-radius: .4rem; color: white; font-weight:bold; background: radial-gradient(ellipse 100% 100% at 50% 100%, #3c3, 50%, #262);}
 .radialGreen:hover {background: radial-gradient(ellipse 100% 100% at 50% 100%, #3c3, 80%, #262);}
 .radialRed {border: none; border-radius: .4rem; color: white; font-weight:bold; background: radial-gradient(ellipse 100% 100% at 50% 100%, #d60, 50%, #930);}
 .radialRed:hover {background: radial-gradient(ellipse 100% 100% at 50% 100%, #d60, 80%, #930);}
 
-.radialOrange {border-radius: .4rem; color: white; font-weight:bold; background: radial-gradient(ellipse 100% 100% at 50% 100%, #c30, 50%, #620);}
+.radialOrange {border-radius: .4rem; color: white; font-weight:bold; background: radial-gradient(ellipse 100% 100% at 50% 100%, #FA0, 50%, #F60);}
 .radialOrange:hover {background: radial-gradient(ellipse 100% 100% at 50% 100%, #3c3, 80%, #262);}
+.radialPurple { border-radius: .4rem; color: white; font-weight:bold; background: radial-gradient(ellipse 100% 100% at 50% 100%, #d60, 50%, #930);}
+.radialPurple:hover {background: radial-gradient(ellipse 100% 100% at 50% 100%, #d60, 80%, #930);}
+.radialBlue {border-radius: .4rem; color: #FFF; font-weight:bold; background: radial-gradient(ellipse 100% 100% at 50% 100%, #5AF, 50%, #39F);}
+.radialBlue:hover {background: radial-gradient(ellipse 100% 100% at 50% 100%, #3c3, 80%, #262);}
 .radialPurple { border-radius: .4rem; color: white; font-weight:bold; background: radial-gradient(ellipse 100% 100% at 50% 100%, #d60, 50%, #930);}
 .radialPurple:hover {background: radial-gradient(ellipse 100% 100% at 50% 100%, #d60, 80%, #930);}
   
@@ -97,4 +145,9 @@ tr:hover td {
 caption {
   padding: 10px;
 }
+
+
+
+
+
 

@@ -7,8 +7,11 @@ let cancelBtn = document.getElementById('cancelEntry');
 let L3Btn = document.getElementById("L3_action");
 let ovlBtn = document.getElementById("overlay_action");
 let exportBtn = document.getElementById("jsonmaker");
-// 
-// targDiv = outer
+let editInfoBtn = document.querySelector("#editInfo .info");
+let editExitBtn = document.querySelector("#editInfo .exit");
+
+/*function addRemoveInfoHandlers(target, action) {
+}*/
 
 function ovlBtnHandler(e) {
   let ovlType = e.target.id.split("_")[0];
@@ -21,6 +24,7 @@ function ovlBtnHandler(e) {
   let wrap;
   let sec;
   let actWrap;
+  let edInfo;
   let ctrls = document.querySelector('#globalControls .row');
   if (ovlType == "L3") {
     input_inst = document.getElementById("L3_input_instructions").content.cloneNode('true');
@@ -56,13 +60,19 @@ function ovlBtnHandler(e) {
   styleSel.appendChild(style_opts);
 
   sec = document.getElementById('editWrapper');
-  dHeight = sec.querySelector('.content').offsetHeight;
+  dHeight = sec.querySelector('#textEntry').offsetHeight;
   wrap = sec.querySelector('.inner');
   actWrap = document.getElementById("initialActionsInner");
   actWrap.setAttribute('style', 'height: 0');
   sleep(700).then(() => {
     wrap.setAttribute('style', 'height: ' + dHeight + "px");
   });
+  editInfoBtn.addEventListener('click', instHandler);
+  editExitBtn.addEventListener('click', instHandler);
+  editInfoBtn.setAttribute('data-evt', true);
+  editExitBtn.setAttribute('data-evt', true);
+  edInfo = document.getElementById('editInfo');
+  edInfo.classList.add('in');
 }
 
 function makeObj(ovlType) {
@@ -181,6 +191,30 @@ function formatStyleId(style) { // Used only by graphic overlays
       break;
   }
   return styleId;
+}
+
+function instHandler(e) {
+  let dHeight;
+  let wrap;
+  let sec;
+  let newHeight;
+  sec = document.getElementById('editWrapper');
+  dHeight = sec.querySelector('.instructionsContainer').offsetHeight;
+  wrap = sec.querySelector('.inner');
+  let wHeight = wrap.offsetHeight;
+   if (e.target.classList.contains('info')) {
+  //   console.log(e.target.classList[0]);
+     newHeight = wHeight + dHeight;
+     editExitBtn.classList.add('over');
+     editExitBtn.classList.add('in');
+   } else {
+    newHeight = wHeight - dHeight;
+    editExitBtn.classList.remove('in');
+    sleep(350).then(() => {
+      editExitBtn.classList.remove('over');
+    });
+   }
+  wrap.setAttribute('style', 'height: ' + newHeight + "px");
 }
 
 function makeTable() {
@@ -340,14 +374,30 @@ function updateFields(range) {
 function clearEverything(src) {
   let targ = (src == "cancelEntry") ? "editInner" : "entriesInner";
   let act = document.getElementById('initialActionsInner');
-  let dHeight = act.querySelector('.content').offsetHeight;
+  let dHeight = act.querySelector('.panel').offsetHeight;
   let targDiv = document.getElementById(targ);
   let proj = document.getElementById("projNum");
   let textArea = document.getElementById("textVal");
   let ver = document.getElementById("versionNumber");
   let options;
   let table;
-
+  let infoDiv;
+  let infoParents = document.querySelectorAll('.infoContainer');
+  let infoParent;
+  for (infoParent of infoParents) {
+    if (infoParent.classList.contains('in')) {
+      infoParent.classList.remove('in');
+    }
+  }
+  let infoDivs = document.querySelectorAll('.infoContainer > div');
+  for (infoDiv of infoDivs) {
+    if (infoDiv.getAttribute('data-evt')) {
+      if (infoDiv.getAttribute('data-evt') === "true") {
+        infoDiv.removeEventListener('click', instHandler);
+        infoDiv.setAttribute('data-evt', "false");
+      }
+    }
+  }
   targDiv.setAttribute('style', 'height: 0');
   sleep(1000).then(() => {
     act.setAttribute('style', 'height: ' + dHeight + 'px');
@@ -549,7 +599,7 @@ processBtn.addEventListener('click', function () {
   });
 
   sec = document.getElementById('entriesWrapper');
-  dHeight = sec.querySelector('.content').offsetHeight;
+  dHeight = sec.querySelector('.panel').offsetHeight;
   inWrap = sec.querySelector('.inner');
   outWrap = document.getElementById("editInner");
   outWrap.setAttribute('style', 'height: 0');

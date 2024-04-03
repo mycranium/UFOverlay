@@ -5,12 +5,14 @@
 <meta charset="utf-8">
 <title>UFOverlay</title>
 <script src="js/unified_preprocessor.js" defer></script>
+<!--script src="__scratch/js/classes_ids.js" defer></script-->
 </head>
 
 <body id="lodi">
 <header>
   <h1>UFOverlay</h1>
   <h2>Ultra-Fast Overlays Text Preprocessor</h2>
+  <!--p>?</p--> 
 </header>
 <main>
   <section id="initialActionsWrapper" class="wrapper">
@@ -19,7 +21,7 @@
         <h3>Step 1: Select Overlay Type</h3>
       </div>
       <div id="initialActionsInner" class="secWrap inner passThrough">
-        <div class="content passThrough">
+        <div class="panel passThrough">
           <div id="initialActionsContainer" class="container">
             <p>Please choose a type of overlay to get started.</p>
             <button id="L3_action" class="action blue" type="button">Lower<br>
@@ -32,15 +34,23 @@
     </div>
   </section>
   <section id="editWrapper" class="wrapper">
-    <div id="editContent" class="secWrap outer passThrough">
-      <div class="heading" id="textEntryHeading">
-        <h3>Step 2: Enter Text List</h3>
+    <div class="heading" id="textEntryHeading">
+      <h3>Step 2: Enter Text List</h3>
+      <div id="editInfo" class="infoContainer">
+        <div class="info" data-evt="false">
+          <p>?</p>
+        </div>
+        <div class="exit" data-evt="false">
+          <p>X</p>
+        </div>
       </div>
-      <div id="editInner" class="secWrap inner passThrough">
-        <div class="content passThrough">
+    </div>
+    <div id="editInner" class="secWrap inner passThrough">
+      <div class="panel passThrough">
+        <div class="container inst passThrough">
           <div class="container instructionsContainer" id="txEntryInstContainer">
+            <h4>Instructions</h4>
             <div class="instructionsRow">
-              <h4>Instructions</h4>
               <ul id="input_instructions">
               </ul>
             </div>
@@ -63,15 +73,23 @@
     </div>
   </section>
   <section id="entriesWrapper" class="wrapper">
-    <div id="entrySec" class="secWrap outer passThrough">
-      <div class="heading" id="settingsHeading">
-        <h3>Step 3: Make Settings &amp; Export</h3>
+    <div class="heading" id="settingsHeading">
+      <h3>Step 3: Make Settings &amp; Export</h3>
+      <div id="entryInfo" class="infoContainer">
+        <div class="info" data-evt="false">
+          <p>?</p>
+        </div>
+        <div class="exit" data-evt="false">
+          <p>X</p>
+        </div>
       </div>
-      <div id="entriesInner" class="secWrap inner passThrough">
-        <div class="content passThrough">
-          <div class="container instructionsContainer" id="editInstContainer">
+    </div>
+    <div id="entriesInner" class="secWrap inner passThrough">
+      <div class="panel passThrough">
+        <div class="container inst passThrough">
+          <div id="entriesInstContainer" class="container instructionsContainer">
+            <h4 id="entries">Instructions</h4>
             <div class="regularRow instructionsRow">
-              <h4>Instructions</h4>
               <ul id="edit_instructions">
               </ul>
             </div>

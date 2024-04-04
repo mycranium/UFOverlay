@@ -7,8 +7,6 @@ let cancelBtn = document.getElementById('cancelEntry');
 let L3Btn = document.getElementById("L3_action");
 let ovlBtn = document.getElementById("overlay_action");
 let exportBtn = document.getElementById("jsonmaker");
-let editInfoBtn = document.querySelector("#editInfo .info");
-let editExitBtn = document.querySelector("#editInfo .exit");
 
 /*function addRemoveInfoHandlers(target, action) {
 }*/
@@ -24,7 +22,6 @@ function ovlBtnHandler(e) {
   let wrap;
   let sec;
   let actWrap;
-  let edInfo;
   let ctrls = document.querySelector('#globalControls .row');
   if (ovlType == "L3") {
     input_inst = document.getElementById("L3_input_instructions").content.cloneNode('true');
@@ -59,7 +56,7 @@ function ovlBtnHandler(e) {
   edit_ul.appendChild(edit_inst);
   styleSel.appendChild(style_opts);
 
-  sec = document.getElementById('editWrapper');
+  sec = document.getElementById('dataEntry');
   dHeight = sec.querySelector('#textEntry').offsetHeight;
   wrap = sec.querySelector('.inner');
   actWrap = document.getElementById("initialActionsInner");
@@ -67,12 +64,31 @@ function ovlBtnHandler(e) {
   sleep(700).then(() => {
     wrap.setAttribute('style', 'height: ' + dHeight + "px");
   });
-  editInfoBtn.addEventListener('click', instHandler);
-  editExitBtn.addEventListener('click', instHandler);
-  editInfoBtn.setAttribute('data-evt', true);
-  editExitBtn.setAttribute('data-evt', true);
-  edInfo = document.getElementById('editInfo');
-  edInfo.classList.add('in');
+  activateInfoButtons("dataEntry")
+}
+
+function activateInfoButtons(src) {
+  let infoBtn = document.querySelector("#" + src + " .info");
+  let exitBtn = document.querySelector("#" + src + "   .exit");
+  infoBtn.addEventListener('click', instHandler);
+  exitBtn.addEventListener('click', instHandler);
+  infoBtn.setAttribute('data-evt', true);
+  exitBtn.setAttribute('data-evt', true);
+  let info = document.querySelector("#" + src + " .infoContainer");
+  info.classList.add('in');  
+}
+
+function deActivateInfoButtons(src) {
+  let infoBtn = document.querySelector("#" + src + " .info");
+  let exitBtn = document.querySelector("#" + src + "   .exit");
+  infoBtn.removeEventListener('click', instHandler);
+  exitBtn.removeEventListener('click', instHandler);
+  infoBtn.setAttribute('data-evt', false);
+  exitBtn.setAttribute('data-evt', false);
+  let info = document.querySelector("#" + src + " .infoContainer");
+  if (info.classList.contains('in')) {
+    info.classList.remove('in');
+  }
 }
 
 function makeObj(ovlType) {
@@ -194,24 +210,23 @@ function formatStyleId(style) { // Used only by graphic overlays
 }
 
 function instHandler(e) {
-  let dHeight;
-  let wrap;
-  let sec;
-  let newHeight;
-  sec = document.getElementById('editWrapper');
-  dHeight = sec.querySelector('.instructionsContainer').offsetHeight;
-  wrap = sec.querySelector('.inner');
+  let sec = e.target.closest("section");//document.getElementById('dataEntry');
+//  console.log(sec.id);
+//  let sec = document.getElementById('dataEntry');
+  let wrap = sec.querySelector('.inner');
+  let dHeight = sec.querySelector('.instructionsContainer').offsetHeight;
   let wHeight = wrap.offsetHeight;
+  let exitBtn = sec.querySelector('.exit');
+  let newHeight;
    if (e.target.classList.contains('info')) {
-  //   console.log(e.target.classList[0]);
      newHeight = wHeight + dHeight;
-     editExitBtn.classList.add('over');
-     editExitBtn.classList.add('in');
+     exitBtn.classList.add('over');
+     exitBtn.classList.add('in');
    } else {
     newHeight = wHeight - dHeight;
-    editExitBtn.classList.remove('in');
+    exitBtn.classList.remove('in');
     sleep(350).then(() => {
-      editExitBtn.classList.remove('over');
+      exitBtn.classList.remove('over');
     });
    }
   wrap.setAttribute('style', 'height: ' + newHeight + "px");
@@ -372,10 +387,10 @@ function updateFields(range) {
 }
 
 function clearEverything(src) {
-  let targ = (src == "cancelEntry") ? "editInner" : "entriesInner";
+  let targ = (src == "cancelEntry") ? "#dataEntry" : "#dataEdit";
   let act = document.getElementById('initialActionsInner');
   let dHeight = act.querySelector('.panel').offsetHeight;
-  let targDiv = document.getElementById(targ);
+  let targDiv = document.querySelector(targ + " .inner");
   let proj = document.getElementById("projNum");
   let textArea = document.getElementById("textVal");
   let ver = document.getElementById("versionNumber");
@@ -598,15 +613,17 @@ processBtn.addEventListener('click', function () {
     allSelectToggle("invert");
   });
 
-  sec = document.getElementById('entriesWrapper');
-  dHeight = sec.querySelector('.panel').offsetHeight;
+  sec = document.getElementById('dataEdit');
+  dHeight = sec.querySelector('#entriesContainer').offsetHeight;
   inWrap = sec.querySelector('.inner');
-  outWrap = document.getElementById("editInner");
+  outWrap = document.querySelector("#dataEntry .inner");
   outWrap.setAttribute('style', 'height: 0');
   sleep(1000).then(() => {
     inWrap.setAttribute('style', 'height: ' + dHeight + "px");
+    deActivateInfoButtons("dataEntry");
+    activateInfoButtons("dataEdit");
+    txtWin.value = "";
   });
-  txtWin.value = "";
 });
 
 resetBtn.addEventListener('click', function () {

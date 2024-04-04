@@ -12,17 +12,15 @@
 <header>
   <h1>UFOverlay</h1>
   <h2>Ultra-Fast Overlays Text Preprocessor</h2>
-  <!--p>?</p--> 
 </header>
 <main>
-  <section id="initialActionsWrapper" class="wrapper">
-    <div id="initialActionsOuter" class="secWrap outer passThrough">
-      <div id="initialActionsHeading" class="heading">
+  <section id="initialActionsWrapper">
+      <div class="heading">
         <h3>Step 1: Select Overlay Type</h3>
       </div>
-      <div id="initialActionsInner" class="secWrap inner passThrough">
-        <div class="panel passThrough">
-          <div id="initialActionsContainer" class="container">
+      <div id="initialActionsInner" class="inner">
+        <div class="panel">
+          <div id="initialActionsContainer">
             <p>Please choose a type of overlay to get started.</p>
             <button id="L3_action" class="action blue" type="button">Lower<br>
             Thirds</button>
@@ -31,12 +29,11 @@
           </div>
         </div>
       </div>
-    </div>
   </section>
-  <section id="editWrapper" class="wrapper">
-    <div class="heading" id="textEntryHeading">
+  <section id="dataEntry">
+    <div class="heading">
       <h3>Step 2: Enter Text List</h3>
-      <div id="editInfo" class="infoContainer">
+      <div class="infoContainer">
         <div class="info" data-evt="false">
           <p>?</p>
         </div>
@@ -45,17 +42,17 @@
         </div>
       </div>
     </div>
-    <div id="editInner" class="secWrap inner passThrough">
-      <div class="panel passThrough">
-        <div class="container inst passThrough">
-          <div class="container instructionsContainer" id="txEntryInstContainer">
+    <div class="inner">
+      <div class="panel">
+        <div class="wrapper">
+          <div class="instructionsContainer">
             <h4>Instructions</h4>
             <div class="instructionsRow">
               <ul id="input_instructions">
               </ul>
             </div>
           </div>
-          <div class="container" id="textEntry">
+          <div id="textEntry">
             <form id="rawForm" name="rawForm">
               <label for="textVal">Paste text here</label>
               <textarea id="textVal" rows="16" autocomplete="off" required></textarea>
@@ -72,10 +69,10 @@
       </div>
     </div>
   </section>
-  <section id="entriesWrapper" class="wrapper">
-    <div class="heading" id="settingsHeading">
+  <section id="dataEdit">
+    <div class="heading">
       <h3>Step 3: Make Settings &amp; Export</h3>
-      <div id="entryInfo" class="infoContainer">
+      <div id="entryInfo" class="infoContainer"><!-- no id -->
         <div class="info" data-evt="false">
           <p>?</p>
         </div>
@@ -84,17 +81,17 @@
         </div>
       </div>
     </div>
-    <div id="entriesInner" class="secWrap inner passThrough">
-      <div class="panel passThrough">
-        <div class="container inst passThrough">
-          <div id="entriesInstContainer" class="container instructionsContainer">
-            <h4 id="entries">Instructions</h4>
-            <div class="regularRow instructionsRow">
+    <div class="inner">
+      <div class="panel">
+        <div class="wrapper">
+          <div class="instructionsContainer">
+            <h4>Instructions</h4>
+            <div class="instructionsRow">
               <ul id="edit_instructions">
               </ul>
             </div>
           </div>
-          <div class="container" id="entriesContainer">
+          <div id="entriesContainer">
             <form id="specsForm" name="specsForm">
               <fieldset id="globalControls">
                 <legend>Global Settings:</legend>
@@ -173,8 +170,7 @@
                       <input type="number" id="versionNumber" name="versionNumber" value="1" min="0" autocomplete="off" />
                     </div>
                     <!--
-          -->
-                    <p>(0 = no change)</p>
+               --><p>(0 = no change)</p>
                   </div>
                   <div class="column">
                     <button class="smallBtn" type="button" id="applySelectedBtn" name="applySelectedBtn">Apply to<br>
@@ -200,8 +196,7 @@
     </div>
   </section>
 </main>
-<footer> 
-  <!--button id="lister" type="button">Generate List</button-->
+<footer>
   <p>Page by Mike Rainey &copy; 2024</p>
 </footer>
 <template id="L3_input_instructions">
@@ -219,7 +214,7 @@
     <pre>07|Medium Message|RIGHT|Looking to transform but not sure what’s possible</pre>
   </li>
   <li>To manually insert a line break into the text, insert a hash character ("#").
-    <ul class="inner">
+    <ul>
       <li>Long message - starts a new line with a blank line between lines</li>
       <li>Stat Text - indicates the separation between the stat and the text</li>
       <li>Short and Medium messages - inserts a line break</li>

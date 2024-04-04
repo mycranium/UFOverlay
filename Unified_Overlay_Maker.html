@@ -87,8 +87,8 @@
           <div class="instructionsContainer">
             <h4>Instructions</h4>
             <div class="instructionsRow">
-              <ul id="edit_instructions">
-              </ul>
+              <!--ul id="edit_instructions">
+              </ul-->
             </div>
           </div>
           <div id="entriesContainer">
@@ -98,7 +98,7 @@
                 <div class="row">
                   <div class="column">
                     <label for="designer" class="hz">Designer: </label>
-                    <input type="text" id="designer" name="designer" size="10" value="Mike Rainey" />
+                    <input type="text" id="designer" name="designer" size="10" value="Mike Rainey" title="Designer name is required." required/>
                   </div>
                   <div class="column">
                     <label for="projNum">Project Number: </label>
@@ -108,11 +108,11 @@
                   <template id="job_overlay_input">
                     <div id="jobNumDiv" class="column">
                       <label for="jobNum">Job Number: </label>
-                      <input type="text" id="jobNum" name="jobNum" size="5" required autocomplete="off" />
+                      <input type="text" id="jobNum" name="jobNum" size="5" required autocomplete="off" title="Job Number is required. Your lead should have provided this for you." required/>
                     </div>
                     <div id="jobNameDiv" class="column">
                       <label for="jobName">Job Name: </label>
-                      <input type="text" id="jobName" name="jobName" size="15" required autocomplete="off" />
+                      <input type="text" id="jobName" name="jobName" size="15" required autocomplete="off" title="Job Name is required. Your lead should have provided this for you." required/>
                     </div>
                   </template>
                 </div>
@@ -123,21 +123,6 @@
                   <div class="column">
                     <div>
                       <label for="style">Style</label>
-                      <template id="style_L3_options">
-                        <option value="none" selected>No Change</option>
-                        <option value="Standard">Standard</option>
-                        <option value="Mini">Mini</option>
-                        <option value="Mini-Quote">Mini-Quote</option>
-                      </template>
-                      <template id="style_overlay_options">
-                        <option value="none" selected>No Change</option>
-                        <option value="Short">Short Message</option>
-                        <option value="Medium">Medium Message</option>
-                        <option value="Long">Long Message</option>
-                        <option value="Stat">Stat</option>
-                        <option value="Stat-Text">Stat with text</option>
-                        <option value="Image">Image</option>
-                      </template>
                       <select name="style" id="style" autocomplete="off">
                       </select>
                     </div>
@@ -159,25 +144,25 @@
                       <label for="side">Side</label>
                       <select name="side" id="side" autocomplete="off">
                         <option value="none" selected>No Change</option>
-                        <option value="R">Right</option>
-                        <option value="L">Left</option>
+                        <option value="Right">Right</option>
+                        <option value="Left">Left</option>
                       </select>
                     </div>
                   </div>
                   <div class="column version">
                     <div>
                       <label for="versionNumber">Version</label>
-                      <input type="number" id="versionNumber" name="versionNumber" value="1" min="0" autocomplete="off" />
+                      <input type="number" id="versionNumber" name="versionNumber" value="0" min="0" autocomplete="off" />
                     </div>
                     <!--
                --><p>(0 = no change)</p>
                   </div>
-                  <div class="column">
-                    <button class="smallBtn" type="button" id="applySelectedBtn" name="applySelectedBtn">Apply to<br>
+                  <div class="column apply">
+                    <button class="smallBtn blue" type="button" id="applySelectedBtn" name="applySelectedBtn">Apply to<br>
                     <span>Selected</span></button>
                   </div>
-                  <div class="column">
-                    <button class="smallBtn" type="button" id="applyAllBtn" name="applyAllBtn">Apply to<br>
+                  <div class="column apply">
+                    <button class="smallBtn orange" type="button" id="applyAllBtn" name="applyAllBtn">Apply to<br>
                     <span>All</span></button>
                   </div>
                 </div>
@@ -186,8 +171,8 @@
             </form>
             <div class="row" id="jsonControls">
               <div class="column">
-                <button type="button" id="jsonmaker" class="radialGreen">Make JSON</button>
-                <button type="button" id="clearAll" class="radialRed">Reset Page</button>
+                <button type="button" id="jsonmaker" class="button green">Make JSON</button>
+                <button type="button" id="clearAll" class="button orange">Reset Page</button>
               </div>
             </div>
           </div>
@@ -200,55 +185,95 @@
   <p>Page by Mike Rainey &copy; 2024</p>
 </footer>
 <template id="L3_input_instructions">
-  <li>Paste the list of names into the <strong>textarea box</strong> below. This form takes tab-separated values, i.e.
-    pasted directly from a spreadsheet.</li>
+  <li>Paste the list of names into the <strong>textarea box</strong> below. This form takes tab-separated values, i.e. pasted directly from a spreadsheet.</li>
   <li>If you want to clear the fields, click the <strong>Clear Fields</strong> button.</li>
   <li>When you're ready to proceed, click the <strong>Process Text</strong> button.</li>
 </template>
 <template id="overlay_input_instructions">
   <li>Paste the list of overlays into the <strong>textarea box</strong> below.</li>
-  <li>Use the pipe character ("|") to separate the different "fields" in the entry text. Text should be formatted like
-    this, with the fields in this order:
+  <li>Use the pipe character ("|") to separate the different "fields" in the entry text. Text should be formatted like this, with the fields in this order:
     <pre>[graphic #]|[type]|[side]|[text]</pre>
     For example:
     <pre>07|Medium Message|RIGHT|Looking to transform but not sure what’s possible</pre>
   </li>
   <li>To manually insert a line break into the text, insert a hash character ("#").
     <ul>
-      <li>Long message - starts a new line with a blank line between lines</li>
-      <li>Stat Text - indicates the separation between the stat and the text</li>
-      <li>Short and Medium messages - inserts a line break</li>
-      <li>Stat - Do not use</li>
+      <li>Long message &ndash; hash character starts a new line and adds a blank line between lines.</li>
+      <li>Stat Text &ndash; hash character indicates the separation between the stat and the text.</li>
+      <li>Short and Medium messages &ndash; hash character inserts a line break.</li>
+      <li>Stat &ndash; Do not use a hash character.</li>
     </ul>
   </li>
-  <li>You generally don't need to insert manual line breaks in Short and Medium messages - the After Effects script
-    will attempt to break lines at appropriate lengths.</li>
+  <li>You generally don't need to insert manual line breaks in Short and Medium messages &ndash; the After Effects script will attempt to break lines at appropriate lengths.</li>
   <li>If you want to clear the fields, click the <strong>Clear Fields</strong> button.</li>
   <li>When you're ready to proceed, click the <strong>Process Text</strong> button.</li>
 </template>
 <template id="L3_edit_instructions">
-  <li>If the designer is someone other than the default, enter their name in the <strong>>Global Settings: Designer</strong> field. (required)</li>
-  <li>Enter a 5-digit project number in the <strong>Global Settings: Job Number</strong> field (required). </li>
-  <li>Select entries for editing by clicking the associated check box. You can use the options in the <strong>Select:</strong> header to make selection easier.</li>
-  <li>To change the default options, make selections from the dropdown menus. Click the <strong>Apply to Selected</strong> or <strong>Apply to All</strong> buttons depending on your needs.</li>
-  <li>If you want a setting not to affect the slected entries, choose <strong>"No Change"</strong> from the dropdown (or enter 0 (zero) in the <strong>Version</strong> input.</li>
-  <li>You can edit the <strong>Number (#)</strong> and <strong>Text</strong> fields directly simply by clicking the text you wish to edit. Changes will be saved when you exit the field.</li>
-  <li>If you want to clear the whole page and start over, click the <strong>Reset Page</strong> button. </li>
-  <li>When you're ready to output the file, click the <strong>Make JSON</strong> button. This will download
-    the JSON file and reset the page.</li>
+  <h5>Global Settings</h5>
+   <ul>
+     <li>All fields in <strong>Global Settings</strong> are required.</li>
+     <li><strong>Project Number</strong> is the 5-digit project code assigned to your work.</li>
+     <li>Consult your lead if you don't know the Project Number.</li>
+  </ul>
+  <h5>Overlay Settings</h5>
+  <ul>
+    <li>Use these controls to edit settings for the different overlays.</li>
+    <li>Settings can be applied to all entries using the <strong>Apply to All</strong> button.</li>
+    <li>To edit specific entries, select the ones you want to change using the checkboxes. Make your settings selections, then click the <strong>Apply to Selected</strong> button.</li>
+    <li>Any setting set to "No Change" will not change that setting on any entry when you click the <strong>Apply to...</strong> buttons (for <strong>Version</strong>, 0 = no change).</li>
+    <li>Use the links below the <strong>Select</strong> heading to select all, deselect all or invert the selection.</li>
+  </ul>
+  <h5>Direct Editing</h5>
+  <ul>
+    <li>You can edit the <strong>Name, Title</strong> and <strong>Quote</strong> fields directly by clicking the text you wish to edit. Changes will be saved when your cursor exits the field.</li>
+  </ul>
+  <h5>Export</h5>
+  <ul>
+    <li>If you want to clear the whole page and start over, click the <strong>Reset Page</strong> button.</li>
+    <li>When you're ready to output the file, click the <strong>Make JSON</strong> button. This will download the JSON file and reset the page.</li>
+    <li>If your browser is set to download files to a default download location, that is where you will find the file. If your browser is set to ask for a dowload location, you can specify the save location and edit the file's name before it saves to disk.</li>
+  </ul>
 </template>
 <template id="overlay_edit_instructions">
-  <li>Enter a 5-digit job number in the <strong>Global Settings: Job Number</strong> field (required). If
-    the designer is someone other than the default, enter their name in the <strong>Designer</strong> field. </li>
-  <li>Select entries for editing by clicking the associated check box. You can use the options in the <strong>Select:</strong> header to help make selecting easier.</li>
-  <li>To change the default options, make selections from the dropdown menus. Click the <strong>Apply to
-    Selected</strong> or <strong>Apply to All</strong> buttons depending on your needs.</li>
-  <li>You can edit the <strong>Version, Name, Title</strong> and <strong>Quote</strong> fields directly
-    simply by clicking the text you wish to edit. Changes will be saved when you exit the field.</li>
-  <li> If you want to clear the whole page and start over, click the <strong>Reset Page</strong> button. </li>
-  <li>When you're ready to output the file, click the <strong>Make JSON</strong> button. This will download
-    the JSON file and reset the page.</li>
-  <li>If your browser is set to download files to a default download location, that is where you will find the file. If your browser is set to ask for a dowload location, you can specify the save location and edit the file's name before it saves to disk.</li>
+  <h5>Global Settings</h5>
+   <ul>
+     <li>All fields in <strong>Global Settings</strong> are required.</li>
+     <li><strong>Project Number</strong> is the 5-digit project code assigned to your work.</li>
+     <li>Consult your lead if you don't know the <strong>Project Number, Job Number</strong> or <strong>Job Name</strong>.</li>
+  </ul>
+  <h5>Overlay Settings</h5>
+  <ul>
+    <li>Use these controls to edit settings for the different overlays.</li>
+    <li>Settings can be applied to all entries using the <strong>Apply to All</strong> button.</li>
+    <li>To edit specific entries, select the ones you want to change using the checkboxes. Make your settings selections, then click the <strong>Apply to Selected</strong> button.</li>
+    <li>Any setting set to "No Change" will not change that setting on any entry when you click the <strong>Apply to...</strong> buttons (for <strong>Version</strong>, 0 = no change).</li>
+    <li>Use the links below the <strong>Select</strong> heading to select all, deselect all or invert the selection.</li>
+  </ul>
+  <h5>Direct Editing</h5>
+  <ul>
+    <li>You can edit the <strong>Number</strong> and <strong>Text</strong> fields directly by clicking the text you wish to edit. Changes will be saved when your cursor exits the field.</li>
+  </ul>
+  <h5>Export</h5>
+  <ul>
+    <li> If you want to clear the whole page and start over, click the <strong>Reset Page</strong> button.</li>
+    <li>When you're ready to output the file, click the <strong>Make JSON</strong> button. This will download the JSON file and reset the page.</li>
+    <li>If your browser is set to download files to a default download location, that is where you will find the file. If your browser is set to ask for a dowload location, you can specify the save location and edit the file's name before it saves to disk.</li>
+  </ul>
+</template>
+<template id="style_L3_options">
+  <option value="none" selected>No Change</option>
+  <option value="Standard">Standard</option>
+  <option value="Mini">Mini</option>
+  <option value="Mini-Quote">Mini-Quote</option>
+</template>
+<template id="style_overlay_options">
+  <option value="none" selected>No Change</option>
+  <option value="Short">Short Message</option>
+  <option value="Medium">Medium Message</option>
+  <option value="Long">Long Message</option>
+  <option value="Stat">Stat</option>
+  <option value="Stat-Text">Stat with text</option>
+  <option value="Image">Image</option>
 </template>
 </body>
 </html>

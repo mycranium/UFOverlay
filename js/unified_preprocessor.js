@@ -8,9 +8,6 @@ let L3Btn = document.getElementById("L3_action");
 let ovlBtn = document.getElementById("overlay_action");
 let exportBtn = document.getElementById("jsonmaker");
 
-/*function addRemoveInfoHandlers(target, action) {
-}*/
-
 function ovlBtnHandler(e) {
   let ovlType = e.target.id.split("_")[0];
   eObj = makeObj(ovlType);
@@ -41,19 +38,19 @@ function ovlBtnHandler(e) {
     ctrls.appendChild(jobs);
   }
   let input_ul = document.getElementById("input_instructions");
-  let edit_ul = document.getElementById("edit_instructions");
+  let edit_row = document.querySelector("#dataEdit .instructionsRow");
   let styleSel = document.getElementById("style");
   while (input_ul.firstChild) {
     input_ul.removeChild(input_ul.lastChild);
   }
-  while (edit_ul.firstChild) {
-    edit_ul.removeChild(edit_ul.lastChild);
+  while (edit_row.firstChild) {
+    edit_row.removeChild(edit_row.lastChild);
   }
   while (styleSel.firstChild) {
     styleSel.removeChild(styleSel.lastChild);
   }
   input_ul.appendChild(input_inst);
-  edit_ul.appendChild(edit_inst);
+  edit_row.appendChild(edit_inst);
   styleSel.appendChild(style_opts);
 
   sec = document.getElementById('dataEntry');
@@ -210,9 +207,7 @@ function formatStyleId(style) { // Used only by graphic overlays
 }
 
 function instHandler(e) {
-  let sec = e.target.closest("section");//document.getElementById('dataEntry');
-//  console.log(sec.id);
-//  let sec = document.getElementById('dataEntry');
+  let sec = e.target.closest("section");
   let wrap = sec.querySelector('.inner');
   let dHeight = sec.querySelector('.instructionsContainer').offsetHeight;
   let wHeight = wrap.offsetHeight;
@@ -403,15 +398,19 @@ function clearEverything(src) {
     if (infoParent.classList.contains('in')) {
       infoParent.classList.remove('in');
     }
-  }
-  let infoDivs = document.querySelectorAll('.infoContainer > div');
-  for (infoDiv of infoDivs) {
-    if (infoDiv.getAttribute('data-evt')) {
-      if (infoDiv.getAttribute('data-evt') === "true") {
-        infoDiv.removeEventListener('click', instHandler);
-        infoDiv.setAttribute('data-evt', "false");
+    sleep(350).then(() => {
+      let infoDivs = document.querySelectorAll('.infoContainer > div');
+      for (infoDiv of infoDivs) {
+        if (infoDiv.classList.contains('over')) { infoDiv.classList.remove('over'); }
+        if (infoDiv.classList.contains('in')) { infoDiv.classList.remove('in'); }
+        if (infoDiv.getAttribute('data-evt')) {
+          if (infoDiv.getAttribute('data-evt') === "true") {
+            infoDiv.removeEventListener('click', instHandler);
+            infoDiv.setAttribute('data-evt', "false");
+          }
+        }
       }
-    }
+    });
   }
   targDiv.setAttribute('style', 'height: 0');
   sleep(1000).then(() => {
@@ -434,6 +433,15 @@ function clearEverything(src) {
     ver.value = "1";
     eObj = makeObj();
   });
+}
+
+function resetSelectDefaults() {
+    let options = document.querySelectorAll('select option');
+  let version = document.getElementById('versionNumber');
+    for (var i = 0, l = options.length; i < l; i++) {
+      options[i].selected = options[i].defaultSelected;
+    }
+  version.value = "0";
 }
 
 function objAddGlobals() {
@@ -520,32 +528,33 @@ function formatDate() { // Formats a new date for use in the new comp folder nam
 }
 
 function applyBtnHandler(e) {
-  let range = (e.target.id.includes("All")) ? "all" : "slctd";
+  let range = (e.target.id == "applyAllBtn") ? "all" : "slctd";
   let globalsArray = getSelects();
   let selectedElems = getSlctdIdx(range);
   let elLen = selectedElems.length;
   let idx;
   for (let i = 0; i < elLen; i++) {
     idx = selectedElems[i];
-    if (globalsArray[0][0] != "none") {
+    if (globalsArray[0][0] !== "none") {
       eObj.entries[idx].style = globalsArray[0][1];
       eObj.entries[idx].styleId = globalsArray[0][0];
     }
 
-    if (globalsArray[1][0] != "none") {
+    if (globalsArray[1][0] !== "none") {
       eObj.entries[idx].color = globalsArray[1][1];
       eObj.entries[idx].colorId = globalsArray[1][0];
     }
 
-    if (globalsArray[2][0] != "none") {
+    if (globalsArray[2][0] !== "none") {
       eObj.entries[idx].side = globalsArray[2][0];
     }
 
-    if (globalsArray[3] != "0") {
+    if (globalsArray[3] !== "0") {
       eObj.entries[idx].version = globalsArray[3];
     }
   }
   updateFields(selectedElems);
+  resetSelectDefaults();
 }
 
 function download(filename, text) {

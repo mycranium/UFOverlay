@@ -10,13 +10,13 @@ header h2 { font-size: 1.8em; }
 header p { font-size: 1.8em; float: right; background-color: white; color: #369edd; height: 1.8rem; width: 1.8rem; border-radius: .9rem; text-align: center;}
 section { background-color: #FFF; position: relative; overflow: hidden; z-index: 2; }
 h3 { margin: 0; padding: .6rem 3rem; font-size: 1.6em; text-align: left; color: white; text-transform: uppercase; }
-h4 { font-size: 1.2em; margin:0 0 1rem 0; padding: .5rem 2rem; background-color: #ddd; color:#000; text-align: left;}
+h4 { font-size: 1.2rem; margin: 0 0 1rem 0; padding: .5rem 2rem; background-color: #369edd; color:#FFF; text-align: left;}
 legend { font-size: 1.2em; font-weight: bold; background-color: #2B7FB3; color: white; border-radius: .2em; padding: 0 .4em .1em; }
 label { font-weight: bold; display: inline-block; }
 input, select { background-color: white; }
-li ul { line-height: 1.2em; }
-li ul li { margin-bottom: .2rem; }
-li { margin-bottom: .75em; }
+li ul { width: 100%; }
+li ul li { margin-bottom: .3rem; }
+/*li { margin-bottom: .75em; }*/
 pre { background-color: #eee; border: 1px solid #333; padding: .3rem; font-size: 1rem; }
 footer { width: 64rem; background-color:#369edd; padding: .25rem 0; margin: 0 auto; }
 footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem 0; margin: 0 auto; }
@@ -39,7 +39,7 @@ footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem
 #rawForm label { display: block; font-size: 1.1em; margin-bottom: .5em;}
 #globalControls, #settingsRow { background-color: #eee; border: 1px solid #999; margin: 0 3rem .6rem; border-radius: .5em; }
 #globalControls p {display: inline-block; vertical-align: text-bottom; font-weight: bold; margin: 0; padding:0; line-height: .75em; }
-#selOpts {text-align: center; }
+#selOpts { text-align: center; }
 #selOpts p {display: block; font-weight: bold; margin: 0; padding:.2em 0 0 ; line-height: 1.2em; }
 #selOpts button { display: inline-block; border: 1px solid rgba(255, 255, 255, 0); border-radius: .4em;background-color: rgba(255, 255, 255, 0); text-decoration: underline; }
 #selOpts button:hover { background-color: #669; color: white; }
@@ -48,10 +48,13 @@ footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem
 #jsonControls { margin-left: 2rem; }
 
 /* INSTRUCTIONS */
-.instructionsContainer { width: 100%; padding: 1.1rem 3rem .5rem 3rem; background-color: #fff; margin: 0;}
+.instructionsContainer { font-size: .96rem; width: 100%; padding: 1.1rem 3rem .5rem 3rem; background-color: #fff; margin: 0;}
 .instructionsContainer h4 { margin: 0; }
-.instructionsRow {padding: 0 0 .5rem 0; width: 100%; border: 1px dotted #555; }
-.instructionsRow ul {width: 90%;}
+.instructionsRow {padding: .3rem 0 1.2rem 0; width: 100%; border: 1px dotted #555; background-color:#DCF2FF; }
+.instructionsRow h5 { font-size: 1rem; margin: 1.1rem 0 0 0; padding: 0 0 0 2rem; }
+.instructionsRow ul { width: 94%; margin: .3rem 0 0 0; padding: 0 0 0 2.9rem; }
+.instructionsRow ul ul { margin: .3rem 0 .1rem 0; }
+.instructionsRow li { margin: 0; padding: 0 0 .2rem 0; line-height: 1.3rem;}
 .wrapper {position: relative; margin: 0; padding: 0; width: 100%}
 
 /* HEADINGS */
@@ -63,8 +66,10 @@ footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem
 
 /* COLUMNS */
 .column:first-child {margin: 0 0 0 .65rem; }
-.column {padding:.5rem 0; margin: 0; display: flex; justify-content: flex-start; align-content: flex-start; align-items: flex-start; gap: .4rem;}
-.column.apply { width: 15rem; margin: 0; }
+.column {padding:.5rem 0 0 ; margin: 0; display: flex; justify-content: flex-start; align-content: flex-start; align-items: flex-start; gap: .4rem; }
+/*.column div {padding: 0 ; margin: 0; display: flex; flex-flow: column nowrap; justify-content: flex-start; align-content: flex-start; align-items: flex-start; gap: .4rem; }*/
+#globalControls .column {padding: 0 ; margin: 0; display: flex; justify-content: flex-start; align-content: flex-start; align-items: center; gap: .4rem; }
+.column.apply { padding: 0; }
 .column.version { text-align: center; display: flex; flex-flow: column nowrap; justify-content: center; align-content: center; align-items: center; gap: .1rem; align-self: flex-start;}
 .column.version div { padding: 0; margin: 0; display: flex; justify-content: flex-start; align-content: center; align-items: center; gap: .4rem; }
 .column.version p { font-size: .8rem; margin:0; padding:0; }
@@ -72,8 +77,9 @@ footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem
 /* BUTTONS */
 .button { font-size: 1rem; width: 10rem; padding: 1rem; margin: .5rem 1rem .5rem 0; border-radius: .4rem; }
 .button:last-child { margin-right: 0; }
-.smallBtn { font-weight: bold; border: 1px inset #000; border-radius: .3em; padding: 3px 6px; background-color: #acf; }
+.smallBtn { width: 6rem; border:none; border-radius: .3em; padding: .3rem .6rem; }
 .smallBtn span { font-size: 1.1rem; font-weight: bold; }
+button span { pointer-events: none; }
 
 /* SLIDERS */
 .panel { position: absolute; bottom: 0; width: 100%; z-index: 3; }
@@ -83,7 +89,7 @@ footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem
 .infoContainer.in { opacity: 1; transition: opacity .3s .7s linear; } 
 .infoContainer div { margin:0; padding: 0; width: 1.65rem; height: 1.65rem; background-color: #2B7FB3; color: #FFF; font-size: 1.4rem; border-radius: .9rem; border: .125rem solid #FFF; text-align: center; position: absolute; right: 3rem; } 
 .infoContainer div:hover { background-color: #38ABF1; } 
-.infoContainer p { margin:0; padding: 0; line-height: 1.65rem; pointer-events: none; font-weight: bold; }
+.infoContainer p { margin:0; padding: 0; line-height: 1.4rem; pointer-events: none; font-weight: bold; }
 .info { z-index: 10; }
 .exit { z-index: 5; opacity: 0; display: none; transition: opacity .3s linear; }
 .exit.in { opacity: 1; transition: opacity .3s linear; }

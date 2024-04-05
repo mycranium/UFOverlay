@@ -144,7 +144,6 @@ function makeOverlays() {
 
     function buildNewCompName(e) { // Constructs the name for the new comp
       o = myData;
-      // if (debug != 0) {alert(e.personName);}
       var sep = "-"
       var prefix = "";
       if (o.hasOwnProperty("prefix")) { prefix = "FRS_FY25_"; }

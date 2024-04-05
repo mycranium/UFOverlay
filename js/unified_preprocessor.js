@@ -9,7 +9,8 @@ let ovlBtn = document.getElementById("overlay_action");
 let exportBtn = document.getElementById("jsonmaker");
 
 function ovlBtnHandler(e) {
-  let ovlType = e.target.id.split("_")[0];
+  let ovlRawType = e.target.id.split("_")[0];
+  let ovlType = toTitleCase(ovlRawType);
   eObj = makeObj(ovlType);
   let input_inst;
   let edit_inst;

@@ -16,7 +16,6 @@ label { font-weight: bold; display: inline-block; }
 input, select { background-color: white; }
 li ul { width: 100%; }
 li ul li { margin-bottom: .3rem; }
-/*li { margin-bottom: .75em; }*/
 pre { background-color: #eee; border: 1px solid #333; padding: .3rem; font-size: 1rem; }
 footer { width: 64rem; background-color:#369edd; padding: .25rem 0; margin: 0 auto; }
 footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem 0; margin: 0 auto; }
@@ -59,7 +58,7 @@ footer p { color: white; font-weight: bold; text-align: center;  padding: .25rem
 
 /* HEADINGS */
 .heading { padding: 0; margin:0; position: relative; z-index: 9; background-color: #2B7FB3; border-bottom: 2px solid #FFF; display: flex; flex-flow: row nowrap; justify-content: space-between; align-items: center; align-content: center; width: 100%; }
-
+h3 span { text-transform: none; opacity: 0; transition: opacity .3s linear; }
 /* ROWS */
 .row {display: flex; justify-content: flex-start; padding: .2rem 1.5rem; gap: 1rem; }
 .row.split {display: flex; justify-content: space-between; padding: .5rem 0; }

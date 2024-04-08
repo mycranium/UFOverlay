@@ -37,6 +37,8 @@ function makeOverlays() {
               if (myData.hasOwnProperty('origin')) {
                 if (myData.type == "Overlay" || myData.type == "L3") { //!/!/! Change this. Any valid type will work. Later, type will be gotten from myData to run correct fuctions.
                   fileValid = true; // necessary to return correct value and to break loop
+                } else {
+                  failMsg = "The data file has an error in property \"origin.\" Please make sure to use a file generated from UFOverly. If the problem persists, please contact your project lead."
                 }
               } else {
                 failMsg = "The file contains JSON data, but is not for Ovelays.";
@@ -152,118 +154,123 @@ function makeOverlays() {
       var outputName = ""
       if (o.type == "Overlay") {
         outputName = o.projNum + sep + prefix + o.jobNum + sep + o.jobName + sep + e.num + sep + e.styleId + sep + version + sep + o.designer + sep + outDate;
-      } else {
+      } else if (o.type == "L3") {
         outputName = o.projNum + sep + e.personName + sep + "L3" + sep + version + sep + o.designer + sep + outDate;
+      } else {
+        return false;
       }
       return outputName;
     }
 
-function generateComps(compsFolder, filePath) { // Generates the required new comps and places them in the new comps folder.
-  try {
-    o = myData;
-    for (var c = 0; c < o.entries.length; c++) { // For each list entry, reads params and constructs source comp ID.
-      var e = o.entries[c];
-      try { var compID = buildTargetCompName(e); } catch (err) { alertErrors("buildTargetCompName", err, true); }
-      try { var outputName = buildNewCompName(e); } catch (err) { alertErrors("buildNewCompName", err, true); }
-      var myComp;
-      for (var i = 1; i <= app.project.numItems; i++) { // Finds correct source comp to clone, matched by name.
-        if ((app.project.item(i) instanceof CompItem) && (app.project.item(i).name === compID)) { // Duplicates and returns the and renames it.
-          myComp = app.project.item(i);
-          try {newComp = myComp.duplicate();} catch (err)  {alert("Didn't work, newComp - " + err.message + " at " + err.line);}
-          newComp.name = outputName;
-          if (myData.type == "L3") {
-            var myItem = newComp.layer("Bar");
-            var myProp = myItem.property("Essential Properties").property("Box Options").property("Color Family");
-            var colorVal = parseInt(e.colorId);
-            try { myProp.setValue(colorVal); } catch (err) {alert("Didn't work, colorId - " + err.message + " at " + err.line);}
-            var numLays = newComp.numLayers;
-            for (y = 1; y <= numLays; y++) { // Finds text layers and sets source text to actual values
-              var myLayer = newComp.layer(y);
-              var lName = myLayer.name;
-              if (myLayer instanceof TextLayer) {
-                if (lName.search(/First/) != -1) {
-                  try { myLayer.sourceText.setValue(e.personName); } catch (err) {alert("Didn't work, personName - " + err.message + " at " + err.line);}
-                } else if (lName.search(/TITLE/) != -1) {
-                  try { myLayer.sourceText.setValue(e.jobTitle); } catch (err) {alert("Didn't work, jobTitle - " + err.message + " at " + err.line);}
-                } else if (lName.search(/Some/) != -1) {
-                  try { myLayer.sourceText.setValue("\"" + e.quote + "\""); } catch (err) {alert("Didn't work, quote - " + err.message + " at " + err.line);}
-                }
-              }
-            }
-          } else {
-            var numLays = newComp.numLayers;
-            for (y = 1; y <= numLays; y++) { // Finds text layers and sets source text to actual values
-              var myLayer = newComp.layer(y);
-              var lName = myLayer.name;
-              if (myLayer instanceof TextLayer) {// if short or medium message
-                if (myComp.name.indexOf("Short") != -1 || myComp.name.indexOf("Medium") != -1) {
-                  var txArray = e.txt.split(" ");
-                  var finalText = ""; // Output string builder
-                  var temp = txArray[0]; // Intermediate string holder starting with first element in array
-                  for (i = 1; i < txArray.length; i++) { //Loop through array of separate words
-                    if (temp.length + txArray[i].length > 13) { // if two words (temp and i) are greater than 10 characters in length total
-                      finalText += temp + "\n"; // push the contents of temp into final with a line break
-                      temp = txArray[i]; // put this word in temp
-                    } else { // If these two words are less than 10 char, push a space and i into temp
-                      temp += " " + txArray[i];
-                    }
-                    if (i == txArray.length - 1) { // Add last word to output string
-                      finalText += temp;
-                      temp = "";
-                    }
-                  } // "for" level 3.0
-                  myLayer.sourceText.setValue(finalText);
-                } else if (myComp.name.indexOf("Long") != -1) {
-                  var allArray = e.txt.split("#");
-                  var lineStr = "";
-                  for (g = 0; g < allArray.length; g++) {
-                    var lineArray = allArray[g].split(" ");
-                    var finalLine = ""; // Output string builder
-                    var tempStr = lineArray[0]; // Intermediate string holder starting with first element in array
-                    for (z = 1; z < lineArray.length; z++) {
-                      if (tempStr.length + lineArray[z].length > 25) {
-                        finalLine += tempStr + "\n";
-                        tempStr = lineArray[z];
-                      } else {
-                        tempStr += " " + lineArray[z];
+    function generateComps(compsFolder, filePath) { // Generates the required new comps and places them in the new comps folder.
+      try {
+        o = myData;
+        for (var c = 0; c < o.entries.length; c++) { // For each list entry, reads params and constructs source comp ID.
+          var e = o.entries[c];
+          try { var compID = buildTargetCompName(e); } catch (err) { alertErrors("buildTargetCompName", err, true); }
+          try { var outputName = buildNewCompName(e); } catch (err) { alertErrors("buildNewCompName", err, true); }
+          if (!outputName && debug === 1) { alert("Error in generateComps() - outputName failed on loop iteration " + i + "."); }
+          var myComp;
+          for (var i = 1; i <= app.project.numItems; i++) { // Finds correct source comp to clone, matched by name.
+            try {
+              if ((app.project.item(i) instanceof CompItem) && (app.project.item(i).name === compID)) { // Duplicates and returns the and renames it.
+                myComp = app.project.item(i);
+                try { newComp = myComp.duplicate(); } catch (err) { alert("Didn't work, newComp - " + err.message + " at " + err.line); }
+                newComp.name = outputName;
+                if (myData.type == "L3") {
+                  var myItem = newComp.layer("Bar");
+                  var myProp = myItem.property("Essential Properties").property("Box Options").property("Color Family");
+                  var colorVal = parseInt(e.colorId);
+                  try { myProp.setValue(colorVal); } catch (err) { alert("Didn't work, colorId - " + err.message + " at " + err.line); }
+                  var numLays = newComp.numLayers;
+                  for (y = 1; y <= numLays; y++) { // Finds text layers and sets source text to actual values
+                    var myLayer = newComp.layer(y);
+                    var lName = myLayer.name;
+                    if (myLayer instanceof TextLayer) {
+                      if (lName.search(/First/) != -1) {
+                        try { myLayer.sourceText.setValue(e.personName); } catch (err) { alert("Didn't work, personName - " + err.message + " at " + err.line); }
+                      } else if (lName.search(/TITLE/) != -1) {
+                        try { myLayer.sourceText.setValue(e.jobTitle); } catch (err) { alert("Didn't work, jobTitle - " + err.message + " at " + err.line); }
+                      } else if (lName.search(/Some/) != -1) {
+                        try { myLayer.sourceText.setValue("\"" + e.quote + "\""); } catch (err) { alert("Didn't work, quote - " + err.message + " at " + err.line); }
                       }
-                      if (z == lineArray.length - 1) {
-                        finalLine += tempStr;
-                        tempStr = "";
-                      }
-                    } // "for" level 4.1.0
-                    lineStr += finalLine;
-                    if (g < allArray.length - 1) {
-                      lineStr += "\n\n";
                     }
-                  } // "for" level 3.1
-                  myLayer.sourceText.setValue(lineStr);
-                } else if (myComp.name.indexOf("Stat-Text") != -1) {
-                  var statArray = e.txt.split("#");
-                  if (lName.indexOf("78") != -1) {
-                    myLayer.sourceText.setValue(e.txt.split("#")[0]);
-                  } else {
-                    myLayer.sourceText.setValue(e.txt.split("#")[1]);
                   }
-                } else if (!myComp.name.indexOf("Image") != -1) {
-                  try { myLayer.sourceText.setValue(e.txt); } catch (err) {alert("Didn't work, txt - " + err.message + " at " + err.line);}
+                } else {
+                  var numLays = newComp.numLayers;
+                  for (y = 1; y <= numLays; y++) { // Finds text layers and sets source text to actual values
+                    var myLayer = newComp.layer(y);
+                    var lName = myLayer.name;
+                    if (myLayer instanceof TextLayer) {// if short or medium message
+                      if (myComp.name.indexOf("Short") != -1 || myComp.name.indexOf("Medium") != -1) {
+                        var txArray = e.txt.split(" ");
+                        var finalText = ""; // Output string builder
+                        var temp = txArray[0]; // Intermediate string holder starting with first element in array
+                        for (i = 1; i < txArray.length; i++) { //Loop through array of separate words
+                          if (temp.length + txArray[i].length > 13) { // if two words (temp and i) are greater than 10 characters in length total
+                            finalText += temp + "\n"; // push the contents of temp into final with a line break
+                            temp = txArray[i]; // put this word in temp
+                          } else { // If these two words are less than 10 char, push a space and i into temp
+                            temp += " " + txArray[i];
+                          }
+                          if (i == txArray.length - 1) { // Add last word to output string
+                            finalText += temp;
+                            temp = "";
+                          }
+                        } // "for" level 3.0
+                        myLayer.sourceText.setValue(finalText);
+                      } else if (myComp.name.indexOf("Long") != -1) {
+                        var allArray = e.txt.split("#");
+                        var lineStr = "";
+                        for (g = 0; g < allArray.length; g++) {
+                          var lineArray = allArray[g].split(" ");
+                          var finalLine = ""; // Output string builder
+                          var tempStr = lineArray[0]; // Intermediate string holder starting with first element in array
+                          for (z = 1; z < lineArray.length; z++) {
+                            if (tempStr.length + lineArray[z].length > 25) {
+                              finalLine += tempStr + "\n";
+                              tempStr = lineArray[z];
+                            } else {
+                              tempStr += " " + lineArray[z];
+                            }
+                            if (z == lineArray.length - 1) {
+                              finalLine += tempStr;
+                              tempStr = "";
+                            }
+                          } // "for" level 4.1.0
+                          lineStr += finalLine;
+                          if (g < allArray.length - 1) {
+                            lineStr += "\n\n";
+                          }
+                        } // "for" level 3.1
+                        myLayer.sourceText.setValue(lineStr);
+                      } else if (myComp.name.indexOf("Stat-Text") != -1) {
+                        var statArray = e.txt.split("#");
+                        if (lName.indexOf("78") != -1) {
+                          myLayer.sourceText.setValue(e.txt.split("#")[0]);
+                        } else {
+                          myLayer.sourceText.setValue(e.txt.split("#")[1]);
+                        }
+                      } else if (!myComp.name.indexOf("Image") != -1) {
+                        try { myLayer.sourceText.setValue(e.txt); } catch (err) { alert("Didn't work, txt - " + err.message + " at " + err.line); }
+                      }
+                    }
+                  } // "for" level 2
                 }
+                if (newComp.parentFolder !== compsFolder) { // moves the comp into the new comps folder.
+                  newComp.parentFolder = compsFolder;
+                }
+                var renderItem = app.project.renderQueue.items.add(newComp); // Adds items to render queue
+                try { renderItem.outputModule(1).applyTemplate("Overlays Output"); } catch (err) { alertErrors("Setting output module template", err, true); }
+                var myFile = new File(filePath.toString() + "/" + outputName);
+                renderItem.outputModule(1).file = myFile
+                break;
               }
-            } // "for" level 2
+            } catch (err) { alertErrors("generateComps() for loop, iteration " + i + ".", err, true) }
           }
-          if (newComp.parentFolder !== compsFolder) { // moves the comp into the new comps folder.
-            newComp.parentFolder = compsFolder;
-          }
-          var renderItem = app.project.renderQueue.items.add(newComp); // Adds items to render queue
-          try { renderItem.outputModule(1).applyTemplate("Overlays Output"); } catch (err) { alertErrors("Setting output module template", err, true); }
-          var myFile = new File(filePath.toString() + "/" + outputName);
-          renderItem.outputModule(1).file = myFile
-          break;
         }
-      }
+      } catch (err) { alertErrors("generateComps", err, true); }
     }
-  } catch (err) { alertErrors("generateComps", err, true); }
-}
 
     function buildOverlays() { // Function that finally creates all the overlays
       if (!setSaveFolder()) {

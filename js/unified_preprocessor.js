@@ -61,8 +61,36 @@ function ovlBtnHandler(e) {
   actWrap.setAttribute('style', 'height: 0');
   sleep(700).then(() => {
     wrap.setAttribute('style', 'height: ' + dHeight + "px");
+    addRemoveH3Type("add");
   });
-  activateInfoButtons("dataEntry")
+  activateInfoButtons("dataEntry");
+}
+function addRemoveH3Type(dir) {
+  let secs = document.querySelectorAll('section:not(#initialActionsWrapper)');
+  let sec;
+  let newText; 
+  let ovlType = eObj.type;
+  if (dir == "add") {
+  if (ovlType == "L3") {
+      newText = " \u2013 Lower Thirds";
+    } else if (ovlType == "Overlay") {
+      newText = " \u2013 Graphics Overlays"
+    } else {
+      return false;
+    }
+  }
+  for (sec of secs) {
+    let heading = sec.querySelector('h3>span');
+    if (dir == "add") {
+      heading.append(newText);
+      heading.setAttribute('style', 'opacity: 1');
+    } else if (dir == "remove") {
+      heading.setAttribute('style', 'opacity: 0');
+      sleep(350).then(() => {
+        heading.firstChild.remove();
+      });
+    }
+  }
 }
 
 function activateInfoButtons(src) {
@@ -395,6 +423,7 @@ function clearEverything(src) {
   let infoDiv;
   let infoParents = document.querySelectorAll('.infoContainer');
   let infoParent;
+  addRemoveH3Type("remove");
   for (infoParent of infoParents) {
     if (infoParent.classList.contains('in')) {
       infoParent.classList.remove('in');

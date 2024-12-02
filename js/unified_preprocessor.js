@@ -71,7 +71,7 @@ function addRemoveH3Type(dir) {
   let newText; 
   let ovlType = eObj.type;
   if (dir == "add") {
-  if (ovlType == "L3") {
+    if (ovlType == "L3") {
       newText = " \u2013 Lower Thirds";
     } else if (ovlType == "Overlay") {
       newText = " \u2013 Graphics Overlays"
@@ -292,6 +292,7 @@ function makeTable() {
   let endString = `      </tbody>\n
         </table>`;
   let rows = "";
+  let rowString = "";
   let en = eObj.entries;
   for (let c = 0; c < en.length; c++) {
     let r = en[c];
